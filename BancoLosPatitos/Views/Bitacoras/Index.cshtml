@@ -1,0 +1,69 @@
+﻿@model IEnumerable<BancoLosPatitos.Models.Bitacora>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TablaDeEvento)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TipoDeEvento)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaDeEvento)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StackTrace)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DatosAnteriores)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DatosPosteriores)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.TablaDeEvento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TipoDeEvento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaDeEvento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StackTrace)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DatosAnteriores)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DatosPosteriores)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.IdEvento }) |
+            @Html.ActionLink("Details", "Details", new { id=item.IdEvento }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.IdEvento })
+        </td>
+    </tr>
+}
+
+</table>

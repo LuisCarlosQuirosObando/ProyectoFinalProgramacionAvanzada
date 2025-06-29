@@ -1,0 +1,127 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Linq;
+using System.Net;
+using System.Web;
+using System.Web.Mvc;
+using BancoLosPatitos.Models;
+
+namespace BancoLosPatitos.Controllers
+{
+    public class ComerciosController : Controller
+    {
+        private PatitosContext db = new PatitosContext();
+
+        // GET: Comercios
+        public ActionResult Index()
+        {
+            return View(db.Comercios.ToList());
+        }
+
+        // GET: Comercios/Details/5
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Comercio comercio = db.Comercios.Find(id);
+            if (comercio == null)
+            {
+                return HttpNotFound();
+            }
+            return View(comercio);
+        }
+
+        // GET: Comercios/Create
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Comercios/Create
+        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
+        // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "IdComercio,Identificacion,TipoIdentificacion,Nombre,TipoDeComercio,Telefono,CorreoElectronico,Direccion,FechaDeRegistro,FechaDeModificacion,Estado")] Comercio comercio)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Comercios.Add(comercio);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(comercio);
+        }
+
+        // GET: Comercios/Edit/5
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Comercio comercio = db.Comercios.Find(id);
+            if (comercio == null)
+            {
+                return HttpNotFound();
+            }
+            return View(comercio);
+        }
+
+        // POST: Comercios/Edit/5
+        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
+        // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "IdComercio,Identificacion,TipoIdentificacion,Nombre,TipoDeComercio,Telefono,CorreoElectronico,Direccion,FechaDeRegistro,FechaDeModificacion,Estado")] Comercio comercio)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(comercio).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(comercio);
+        }
+
+        // GET: Comercios/Delete/5
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Comercio comercio = db.Comercios.Find(id);
+            if (comercio == null)
+            {
+                return HttpNotFound();
+            }
+            return View(comercio);
+        }
+
+        // POST: Comercios/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            Comercio comercio = db.Comercios.Find(id);
+            db.Comercios.Remove(comercio);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+    }
+}

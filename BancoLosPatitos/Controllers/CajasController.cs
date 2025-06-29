@@ -1,0 +1,132 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Linq;
+using System.Net;
+using System.Web;
+using System.Web.Mvc;
+using BancoLosPatitos.Models;
+
+namespace BancoLosPatitos.Controllers
+{
+    public class CajasController : Controller
+    {
+        private PatitosContext db = new PatitosContext();
+
+        // GET: Cajas
+        public ActionResult Index()
+        {
+            var cajas = db.Cajas.Include(c => c.Comercio);
+            return View(cajas.ToList());
+        }
+
+        // GET: Cajas/Details/5
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Caja caja = db.Cajas.Find(id);
+            if (caja == null)
+            {
+                return HttpNotFound();
+            }
+            return View(caja);
+        }
+
+        // GET: Cajas/Create
+        public ActionResult Create()
+        {
+            ViewBag.IdComercio = new SelectList(db.Comercios, "IdComercio", "Identificacion");
+            return View();
+        }
+
+        // POST: Cajas/Create
+        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
+        // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "IdCaja,IdComercio,Nombre,Descripcion,TelefonoSINPE,FechaDeRegistro,FechaDeModificacion,Estado")] Caja caja)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Cajas.Add(caja);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.IdComercio = new SelectList(db.Comercios, "IdComercio", "Identificacion", caja.IdComercio);
+            return View(caja);
+        }
+
+        // GET: Cajas/Edit/5
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Caja caja = db.Cajas.Find(id);
+            if (caja == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.IdComercio = new SelectList(db.Comercios, "IdComercio", "Identificacion", caja.IdComercio);
+            return View(caja);
+        }
+
+        // POST: Cajas/Edit/5
+        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
+        // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "IdCaja,IdComercio,Nombre,Descripcion,TelefonoSINPE,FechaDeRegistro,FechaDeModificacion,Estado")] Caja caja)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(caja).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            ViewBag.IdComercio = new SelectList(db.Comercios, "IdComercio", "Identificacion", caja.IdComercio);
+            return View(caja);
+        }
+
+        // GET: Cajas/Delete/5
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Caja caja = db.Cajas.Find(id);
+            if (caja == null)
+            {
+                return HttpNotFound();
+            }
+            return View(caja);
+        }
+
+        // POST: Cajas/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            Caja caja = db.Cajas.Find(id);
+            db.Cajas.Remove(caja);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+    }
+}

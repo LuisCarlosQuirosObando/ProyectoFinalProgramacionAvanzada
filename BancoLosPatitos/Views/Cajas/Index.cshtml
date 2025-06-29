@@ -1,0 +1,69 @@
+﻿@model IEnumerable<BancoLosPatitos.Models.Caja>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Comercio.Identificacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TelefonoSINPE)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaDeRegistro)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaDeModificacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Estado)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Comercio.Identificacion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TelefonoSINPE)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaDeRegistro)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaDeModificacion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Estado)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.IdCaja }) |
+            @Html.ActionLink("Details", "Details", new { id=item.IdCaja }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.IdCaja })
+        </td>
+    </tr>
+}
+
+</table>
