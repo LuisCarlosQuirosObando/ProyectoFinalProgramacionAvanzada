@@ -1,9 +1,23 @@
 ﻿@{
-    ViewBag.Title = "About";
+    ViewBag.Title = "Acerca de la aplicación";
 }
-<main aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title.</h2>
-    <h3>@ViewBag.Message</h3>
-
-    <p>Use this area to provide additional information.</p>
+<main class="container mt-4" aria-labelledby="title">
+    <div class="card p-4 shadow">
+        <h2 id="title" class="mb-3">@ViewBag.Title</h2>
+        <p class="lead">@ViewBag.Message</p>
+        <hr class="my-4"/>
+        <p>
+            Este sistema fue desarrollado como un proyecto universitario para la gestión del Banco Los Patitos.
+            Incluye funcionalidades para:
+        </p>
+        <ul>
+            <li>Registrar, editar y ver comercios luego de validar su identificación</li>
+            <li>Asignar y administrar cajas asociadas a cada comercio</li>
+            <li>Registrar operaciones SINPE</li>
+            <li>Controlar y consultar la bitácora de cambios del sistema</li>
+        </ul>
+        <p class="mt-3">
+            <strong>Tecnologías utilizadas:</strong> ASP.NET MVC, Entity Framework y SQL Server.
+        </p>
+    </div>
 </main>
