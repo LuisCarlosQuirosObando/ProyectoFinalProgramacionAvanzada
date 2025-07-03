@@ -10,14 +10,7 @@
     <h4>Caja</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Comercio.Identificacion)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Comercio.Identificacion)
-        </dd>
-
+       
         <dt>
             @Html.DisplayNameFor(model => model.Nombre)
         </dt>
@@ -50,14 +43,7 @@
             @Html.DisplayFor(model => model.FechaDeRegistro)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.FechaDeModificacion)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.FechaDeModificacion)
-        </dd>
-
+       
         <dt>
             @Html.DisplayNameFor(model => model.Estado)
         </dt>
@@ -70,5 +56,6 @@
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.IdCaja }) |
+    @Html.ActionLink("Ver SINPE", "Details", new { id = item.IdComercio })
     @Html.ActionLink("Back to List", "Index")
 </p>
