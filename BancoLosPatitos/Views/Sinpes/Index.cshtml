@@ -6,70 +6,84 @@
 
 <h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.TelefonoOrigen)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.NombreOrigen)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TelefonoDestinatario)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.NombreDestinatario)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Monto)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FechaDeRegistro)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Descripcion)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Estado)
-        </th>
-        <th></th>
-    </tr>
+@using (Html.BeginForm("VerSinpes", "Cajas", FormMethod.Get))
+{
+    <div class="form-group">
+        <label for="id">Buscar SINPE</label>
+        <div class="input-group">
+            <input type="number" id="telefono" name="telefono" class="form-control" placeholder="Ingrese el número de teléfono" required />
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-success">Buscar</button>
+            </span>
+        </div>
+    </div>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.TelefonoOrigen)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NombreOrigen)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TelefonoDestinatario)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NombreDestinatario)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Monto)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FechaDeRegistro)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Descripcion)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Estado)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.IdSinpe }) |
-            @Html.ActionLink("Details", "Details", new { id=item.IdSinpe }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.IdSinpe })
-        </td>
-    </tr>
-}
 
-</table>
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TelefonoOrigen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NombreOrigen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TelefonoDestinatario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NombreDestinatario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Monto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaDeRegistro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Estado)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TelefonoOrigen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NombreOrigen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TelefonoDestinatario)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NombreDestinatario)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Monto)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaDeRegistro)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descripcion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Estado)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.IdSinpe }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.IdSinpe }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.IdSinpe })
+                </td>
+            </tr>
+        }
+
+    </table>

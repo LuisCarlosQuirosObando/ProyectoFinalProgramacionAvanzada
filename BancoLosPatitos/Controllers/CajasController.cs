@@ -82,11 +82,23 @@ namespace BancoLosPatitos.Controllers
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "IdCaja,IdComercio,Nombre,Descripcion,TelefonoSINPE,FechaDeRegistro,FechaDeModificacion,Estado")] Caja caja)
+        public ActionResult Edit([Bind(Include = "IdCaja,IdComercio,Nombre,Descripcion,TelefonoSINPE,FechaDeRegistro,Estado")] Caja caja)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(caja).State = EntityState.Modified;
+                // Obtener la caja existente
+                var cajaActual = db.Cajas.Find(caja.IdCaja);
+                if (cajaActual == null) return HttpNotFound();
+
+                // Actualizar manualmente los campos permitidos
+                cajaActual.Nombre = caja.Nombre;
+                cajaActual.Descripcion = caja.Descripcion;
+                cajaActual.TelefonoSINPE = caja.TelefonoSINPE;
+                cajaActual.Estado = caja.Estado;
+
+                // ✅ Asignar la fecha de modificación automáticamente
+                cajaActual.FechaDeModificacion = DateTime.Now;
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -120,6 +132,19 @@ namespace BancoLosPatitos.Controllers
             return RedirectToAction("Index");
         }
 
+
+        public ActionResult VerSinpes(string telefono)
+        {
+            if (string.IsNullOrEmpty(telefono))
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var sinpes = db.Sinpes
+                .Where(s => s.TelefonoDestinatario == telefono)
+                .OrderByDescending(s => s.FechaDeRegistro)
+                .ToList();
+
+            return View("~/Views/Sinpes/Index.cshtml", sinpes);
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
