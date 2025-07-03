@@ -51,9 +51,11 @@
             @Html.DisplayFor(modelItem => item.Estado)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.IdCaja }) |
-            @Html.ActionLink("Details", "Details", new { id=item.IdCaja }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.IdCaja })
+            @Html.ActionLink("Edit", "Edit", new { id = item.IdCaja }) |
+
+            @Html.ActionLink("Ver SINPE", "Index", "Sinpes", new { telefono = item.TelefonoSINPE }, null)
+
+
         </td>
     </tr>
 }
