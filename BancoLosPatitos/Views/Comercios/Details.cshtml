@@ -1,10 +1,10 @@
 ﻿@model BancoLosPatitos.Models.Comercio
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Detalles";
 }
 
-<h2>Details</h2>
+<h2>Detalles</h2>
 
 <div>
     <h4>Comercio</h4>
@@ -19,11 +19,17 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.TipoIdentificacion)
+            Tipo de identificacion
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.TipoIdentificacion)
+            @(
+             Model.TipoIdentificacion switch
+             {
+                 1 => "Física",
+                 2 => "Jurídica",                
+                 _ => "No especifica"
+              })
         </dd>
 
         <dt>
@@ -35,11 +41,18 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.TipoDeComercio)
+            Tipo de comercio
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.TipoDeComercio)
+            @(
+             Model.TipoDeComercio switch
+             {
+                 1 => "Restaurantes",
+                 2 => "Supermercados",
+                 3 => "Ferreterías",
+                 _ => "Otros"
+              })
         </dd>
 
         <dt>
@@ -51,7 +64,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CorreoElectronico)
+            Correo electronico
         </dt>
 
         <dd>
@@ -67,7 +80,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.FechaDeRegistro)
+            Fecha de registro
         </dt>
 
         <dd>
@@ -75,7 +88,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.FechaDeModificacion)
+            Fecha de modificacion
         </dt>
 
         <dd>
@@ -87,12 +100,16 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Estado)
+            @(
+             Model.Estado switch
+             {
+                 1 => "Activo",
+                 _ => "Inactivo"
+              })
         </dd>
 
     </dl>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.IdComercio }) |
-    @Html.ActionLink("Back to List", "Index")
+<p>    
+    @Html.ActionLink("Regresar", "Index")
 </p>

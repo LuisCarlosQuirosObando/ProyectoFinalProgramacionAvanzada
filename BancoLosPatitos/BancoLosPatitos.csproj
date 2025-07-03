@@ -209,6 +209,7 @@
     <Content Include="Views\Sinpes\Details.cshtml" />
     <Content Include="Views\Sinpes\Edit.cshtml" />
     <Content Include="Views\Sinpes\Index.cshtml" />
+    <Content Include="Views\Comercios\ValidarIdentificacion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
