@@ -4,7 +4,7 @@
     ViewBag.Title = "SINPE";
 }
 
-<h2>Crear Nuevo SINPE</h2>
+<h2>SINPES</h2>
 <p>
     @Html.ActionLink("Crear Nuevo", "Create", null, new { @class = "btn btn-outline-success" })
 
@@ -37,22 +37,22 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.TelefonoOrigen)
+           Telefono de origen
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.NombreOrigen)
+           Nombre de origen
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TelefonoDestinatario)
+           Telefono del destinatario
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.NombreDestinatario)
+            Nombre del destinatario
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Monto)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FechaDeRegistro)
+            Fecha
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Descripcion)
@@ -88,7 +88,7 @@
                 @Html.DisplayFor(modelItem => item.Descripcion)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Estado)
+                @(item.Estado == 1 ? "Sincronizado" : "No sincronizado")
             </td>
             
         </tr>
@@ -96,5 +96,5 @@
 
 </table>
 <div>
-    @Html.ActionLink("Regresar", "Index")
+    @Html.ActionLink("Regresar a menu principal", "Index", "Home")
 </div>

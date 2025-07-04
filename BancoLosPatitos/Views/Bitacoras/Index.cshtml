@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<BancoLosPatitos.Models.Bitacora>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Modulo de bitacora";
 }
 
-<h2>Index</h2>
+<h2>Bitacora de movimientos</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -67,3 +67,6 @@
 }
 
 </table>
+<div>
+    @Html.ActionLink("Regresar a menu principal", "Index", "Home")
+</div>

@@ -15,9 +15,19 @@ namespace BancoLosPatitos.Controllers
         private PatitosContext db = new PatitosContext();
 
         // GET: Cajas
-        public ActionResult Index()
+        public ActionResult Index(int? idComercio)
         {
             var cajas = db.Cajas.Include(c => c.Comercio);
+
+            if (idComercio.HasValue)
+            {
+                cajas = cajas.Where(c => c.IdComercio == idComercio.Value);
+                ViewBag.FiltroComercio = db.Comercios
+                    .Where(c => c.IdComercio == idComercio.Value)
+                    .Select(c => c.Nombre)
+                    .FirstOrDefault();
+            }
+
             return View(cajas.ToList());
         }
 
@@ -71,6 +81,7 @@ namespace BancoLosPatitos.Controllers
                 if (!existeNombre && !existeTelefono)
                 {
                     caja.FechaDeRegistro = DateTime.Now;
+                    caja.FechaDeModificacion = DateTime.Now;
                     db.Cajas.Add(caja);
                     db.SaveChanges();
                     return RedirectToAction("Index");

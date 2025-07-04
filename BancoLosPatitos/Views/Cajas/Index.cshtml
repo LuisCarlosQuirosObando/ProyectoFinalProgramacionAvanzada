@@ -19,15 +19,17 @@
             @Html.DisplayNameFor(model => model.Descripcion)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TelefonoSINPE)
+            Teléfono SINPE
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FechaDeRegistro)
+            Fecha de registro
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Estado)
         </th>
-        <th></th>
+        <th>
+            Acciones
+        </th>
     </tr>
 
 @foreach (var item in Model) {
@@ -48,7 +50,7 @@
         </td>
 
         <td>
-            @Html.DisplayFor(modelItem => item.Estado)
+            @(item.Estado == 1 ? "Activo" : "Inactivo")
         </td>
         <td>
             @Html.ActionLink("Editar", "Edit", new { id = item.IdCaja }) |
@@ -58,3 +60,7 @@
 }
 
 </table>
+
+<div>
+    @Html.ActionLink("Regresar", "Index", "Comercios")
+</div>
