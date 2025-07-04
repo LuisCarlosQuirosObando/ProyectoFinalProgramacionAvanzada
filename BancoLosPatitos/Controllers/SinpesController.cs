@@ -48,8 +48,23 @@ namespace BancoLosPatitos.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "IdSinpe,TelefonoOrigen,NombreOrigen,TelefonoDestinatario,NombreDestinatario,Monto,FechaDeRegistro,Descripcion,Estado")] Sinpe sinpe)
         {
+            // Valida si hay una caja existente
+            var cajaDestino = db.Cajas.FirstOrDefault(c => c.TelefonoSINPE == sinpe.TelefonoDestinatario);
+
+            if (cajaDestino == null)
+            {
+                ModelState.AddModelError("TelefonoDestinatario", "No existe una caja con este número de teléfono.");
+            }
+            // caja inactiva
+            else if (cajaDestino.Estado != 1) 
+            {
+                ModelState.AddModelError("TelefonoDestinatario", "No se puede realizar pagos hacia una caja inactiva.");
+            }
+
             if (ModelState.IsValid)
             {
+                sinpe.Estado = 0;
+                sinpe.FechaDeRegistro = DateTime.Now;
                 db.Sinpes.Add(sinpe);
                 db.SaveChanges();
                 return RedirectToAction("Index");

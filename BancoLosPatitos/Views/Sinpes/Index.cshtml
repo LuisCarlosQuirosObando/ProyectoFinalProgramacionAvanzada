@@ -1,89 +1,100 @@
 ﻿@model IEnumerable<BancoLosPatitos.Models.Sinpe>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "SINPE";
 }
 
-<h2>Index</h2>
+<h2>Crear Nuevo SINPE</h2>
+<p>
+    @Html.ActionLink("Crear Nuevo", "Create", null, new { @class = "btn btn-outline-success" })
 
-@using (Html.BeginForm("VerSinpes", "Cajas", FormMethod.Get))
+</p>
+
+@if (Request.QueryString["telefono"] != null)
 {
-    <div class="form-group">
-        <label for="id">Buscar SINPE</label>
-        <div class="input-group">
-            <input type="number" id="telefono" name="telefono" class="form-control" placeholder="Ingrese el número de teléfono" required />
-            <span class="input-group-btn">
-                <button type="submit" class="btn btn-success">Buscar</button>
-            </span>
+    <div class="row align-items-center mb-3">
+        <div class="col-md-6">
+            <h5 class="mb-0 text-primary">
+                SINPE recibidos en caja: @Request.QueryString["telefono"]
+            </h5>
+        </div>
+        <div class="col-md-6 text-right">
+            @using (Html.BeginForm("VerSinpes", "Cajas", FormMethod.Get))
+            {
+                <div class="form-inline justify-content-end">
+                    <label for="telefono" class="mr-2">Buscar SINPE:</label>
+                    <input type="number" id="telefono" name="telefono" class="form-control mr-2" placeholder="Teléfono" required />
+                    <button type="submit" class="btn btn-success">Buscar</button>
+                </div>
+            }
         </div>
     </div>
+}
 
 
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
-    <table class="table">
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TelefonoOrigen)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NombreOrigen)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TelefonoDestinatario)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NombreDestinatario)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Monto)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaDeRegistro)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Estado)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.TelefonoOrigen)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NombreOrigen)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TelefonoDestinatario)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NombreDestinatario)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Monto)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaDeRegistro)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descripcion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Estado)
-            </th>
-            <th></th>
+            <td>
+                @Html.DisplayFor(modelItem => item.TelefonoOrigen)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombreOrigen)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TelefonoDestinatario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombreDestinatario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Monto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaDeRegistro)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Estado)
+            </td>
+            
         </tr>
+    }
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TelefonoOrigen)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NombreOrigen)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TelefonoDestinatario)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NombreDestinatario)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Monto)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FechaDeRegistro)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Descripcion)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Estado)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.IdSinpe }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.IdSinpe }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.IdSinpe })
-                </td>
-            </tr>
-        }
-
-    </table>
+</table>
+<div>
+    @Html.ActionLink("Regresar", "Index")
+</div>

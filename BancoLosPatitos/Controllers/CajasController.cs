@@ -52,9 +52,29 @@ namespace BancoLosPatitos.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Cajas.Add(caja);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                // Revisa si hay nombre repetido
+                bool existeNombre = db.Cajas.Any(c => c.Nombre == caja.Nombre && c.IdComercio == caja.IdComercio);
+
+                // Revisa si hay un teléfono repetido
+                bool existeTelefono = db.Cajas.Any(c => c.TelefonoSINPE == caja.TelefonoSINPE);
+
+                if (existeNombre)
+                {
+                    ModelState.AddModelError("Nombre", "Ya existe una caja con este nombre para este comercio.");
+                }
+
+                if (existeTelefono)
+                {
+                    ModelState.AddModelError("TelefonoSINPE", "Ya existe una caja registrada con este número de SINPE.");
+                }
+
+                if (!existeNombre && !existeTelefono)
+                {
+                    caja.FechaDeRegistro = DateTime.Now;
+                    db.Cajas.Add(caja);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
 
             ViewBag.IdComercio = new SelectList(db.Comercios, "IdComercio", "Identificacion", caja.IdComercio);
@@ -90,13 +110,12 @@ namespace BancoLosPatitos.Controllers
                 var cajaActual = db.Cajas.Find(caja.IdCaja);
                 if (cajaActual == null) return HttpNotFound();
 
-                // Actualizar manualmente los campos permitidos
                 cajaActual.Nombre = caja.Nombre;
                 cajaActual.Descripcion = caja.Descripcion;
                 cajaActual.TelefonoSINPE = caja.TelefonoSINPE;
                 cajaActual.Estado = caja.Estado;
 
-                // ✅ Asignar la fecha de modificación automáticamente
+                //Registra fecha de modificación automatico
                 cajaActual.FechaDeModificacion = DateTime.Now;
 
                 db.SaveChanges();
@@ -145,6 +164,7 @@ namespace BancoLosPatitos.Controllers
 
             return View("~/Views/Sinpes/Index.cshtml", sinpes);
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

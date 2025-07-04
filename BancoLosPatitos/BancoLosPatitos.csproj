@@ -204,12 +204,12 @@
     <Content Include="Views\Comercios\Details.cshtml" />
     <Content Include="Views\Comercios\Edit.cshtml" />
     <Content Include="Views\Comercios\Index.cshtml" />
+    <Content Include="Views\Comercios\ValidarIdentificacion.cshtml" />
     <Content Include="Views\Sinpes\Create.cshtml" />
     <Content Include="Views\Sinpes\Delete.cshtml" />
     <Content Include="Views\Sinpes\Details.cshtml" />
     <Content Include="Views\Sinpes\Edit.cshtml" />
     <Content Include="Views\Sinpes\Index.cshtml" />
-    <Content Include="Views\Comercios\ValidarIdentificacion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
