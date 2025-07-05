@@ -48,14 +48,11 @@ namespace BancoLosPatitos.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "IdSinpe,TelefonoOrigen,NombreOrigen,TelefonoDestinatario,NombreDestinatario,Monto,FechaDeRegistro,Descripcion,Estado")] Sinpe sinpe)
         {
-            // Valida si hay una caja existente
             var cajaDestino = db.Cajas.FirstOrDefault(c => c.TelefonoSINPE == sinpe.TelefonoDestinatario);
-
             if (cajaDestino == null)
             {
                 ModelState.AddModelError("TelefonoDestinatario", "No existe una caja con este número de teléfono.");
             }
-            // caja inactiva
             else if (cajaDestino.Estado != 1) 
             {
                 ModelState.AddModelError("TelefonoDestinatario", "No se puede realizar pagos hacia una caja inactiva.");
@@ -63,11 +60,23 @@ namespace BancoLosPatitos.Controllers
 
             if (ModelState.IsValid)
             {
+               try
+                {
                 sinpe.Estado = 0;
                 sinpe.FechaDeRegistro = DateTime.Now;
                 db.Sinpes.Add(sinpe);
                 db.SaveChanges();
+
+                Helpers.BitacoraHelper.RegistrarEvento(db, "SINPES", "Registrar", sinpe);
+
                 return RedirectToAction("Index");
+                }
+
+               catch (Exception ex)
+                {
+                    Helpers.BitacoraHelper.RegistrarError(db, "Sinpes", ex);
+                    ModelState.AddModelError("", "Ocurrió un error al crear SINPE.");
+                }
             }
 
             return View(sinpe);
@@ -97,6 +106,7 @@ namespace BancoLosPatitos.Controllers
         {
             if (ModelState.IsValid)
             {
+
                 db.Entry(sinpe).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

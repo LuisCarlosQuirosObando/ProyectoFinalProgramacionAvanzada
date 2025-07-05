@@ -66,13 +66,23 @@ namespace BancoLosPatitos.Controllers
         {
             if (ModelState.IsValid)
             {
+              try { 
                 comercio.FechaDeRegistro = DateTime.Now;
                 comercio.FechaDeModificacion = DateTime.Now;
                 comercio.Estado = 1;
                 db.Comercios.Add(comercio);
                 db.SaveChanges();
+
+                Helpers.BitacoraHelper.RegistrarEvento(db, "Comercios", "Registrar", comercio);
                 return RedirectToAction("Index");
+                }
+
+                catch (Exception ex)
+                {
+                Helpers.BitacoraHelper.RegistrarError(db, "Comercios", ex);
+                ModelState.AddModelError("", "Ocurrió un error al crear comercio.");
             }
+        }
 
             return View(comercio);
         }
@@ -115,10 +125,23 @@ namespace BancoLosPatitos.Controllers
         {
             if (ModelState.IsValid)
             {
-                comercio.FechaDeModificacion = DateTime.Now;
-                db.Entry(comercio).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    var datosAnteriores = db.Comercios.AsNoTracking().FirstOrDefault(c => c.IdComercio == comercio.IdComercio);
+
+                    comercio.FechaDeModificacion = DateTime.Now;
+                    db.Entry(comercio).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    Helpers.BitacoraHelper.RegistrarEvento(db, "Comercios", "Modificar", datosAnteriores, comercio, "");
+
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    Helpers.BitacoraHelper.RegistrarError(db, "Comercios", ex);
+                    ModelState.AddModelError("", "Ocurrió un error al editar comercio.");
+                }
             }
             return View(comercio);
         }

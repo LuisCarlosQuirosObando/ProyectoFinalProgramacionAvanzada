@@ -62,10 +62,10 @@ namespace BancoLosPatitos.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Revisa si hay nombre repetido
-                bool existeNombre = db.Cajas.Any(c => c.Nombre == caja.Nombre && c.IdComercio == caja.IdComercio);
-
-                // Revisa si hay un teléfono repetido
+                try
+                {
+                
+                bool existeNombre = db.Cajas.Any(c => c.Nombre == caja.Nombre && c.IdComercio == caja.IdComercio);            
                 bool existeTelefono = db.Cajas.Any(c => c.TelefonoSINPE == caja.TelefonoSINPE);
 
                 if (existeNombre)
@@ -84,7 +84,17 @@ namespace BancoLosPatitos.Controllers
                     caja.FechaDeModificacion = DateTime.Now;
                     db.Cajas.Add(caja);
                     db.SaveChanges();
+
+                    Helpers.BitacoraHelper.RegistrarEvento(db, "Cajas", "Registrar", caja);
+
                     return RedirectToAction("Index");
+                }
+                }
+
+                catch (Exception ex)
+                {
+                    Helpers.BitacoraHelper.RegistrarError(db, "Cajas", ex);
+                    ModelState.AddModelError("", "Ocurrió un error al crear caja.");
                 }
             }
 
@@ -117,7 +127,8 @@ namespace BancoLosPatitos.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Obtener la caja existente
+                try {
+                var datosAnteriores = db.Cajas.AsNoTracking().FirstOrDefault(c => c.IdCaja == caja.IdCaja);
                 var cajaActual = db.Cajas.Find(caja.IdCaja);
                 if (cajaActual == null) return HttpNotFound();
 
@@ -125,13 +136,22 @@ namespace BancoLosPatitos.Controllers
                 cajaActual.Descripcion = caja.Descripcion;
                 cajaActual.TelefonoSINPE = caja.TelefonoSINPE;
                 cajaActual.Estado = caja.Estado;
-
-                //Registra fecha de modificación automatico
+               
                 cajaActual.FechaDeModificacion = DateTime.Now;
 
                 db.SaveChanges();
+
+                Helpers.BitacoraHelper.RegistrarEvento(db, "Cajas", "Modificar", datosAnteriores, caja, "");
+
                 return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    Helpers.BitacoraHelper.RegistrarError(db, "Cajas", ex);
+                    ModelState.AddModelError("", "Ocurrió un error al editar caja.");
+                }
             }
+
             ViewBag.IdComercio = new SelectList(db.Comercios, "IdComercio", "Identificacion", caja.IdComercio);
             return View(caja);
         }

@@ -126,6 +126,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\BitacoraHelper.cs" />
     <Compile Include="Migrations\202506291756202_Inicial.cs" />
     <Compile Include="Migrations\202506291756202_Inicial.Designer.cs">
       <DependentUpon>202506291756202_Inicial.cs</DependentUpon>
