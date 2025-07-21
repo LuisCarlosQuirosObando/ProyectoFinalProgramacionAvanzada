@@ -1,0 +1,66 @@
+﻿@model BancoLosPatitos.Models.Reporte
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Reporte</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Comercio.Identificacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Comercio.Identificacion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CantidadDeCajas)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CantidadDeCajas)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MontoTotalRecaudado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MontoTotalRecaudado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CantidadDeSINPES)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CantidadDeSINPES)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MontoTotalComision)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MontoTotalComision)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaDelReporte)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaDelReporte)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.IdReporte }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

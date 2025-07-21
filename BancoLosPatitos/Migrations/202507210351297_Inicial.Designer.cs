@@ -13,7 +13,7 @@ namespace BancoLosPatitos.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "202506291756202_Inicial"; }
+            get { return "202507210351297_Inicial"; }
         }
         
         string IMigrationMetadata.Source
