@@ -69,7 +69,7 @@ namespace BancoLosPatitos.Controllers
 
                 Helpers.BitacoraHelper.RegistrarEvento(db, "SINPES", "Registrar", sinpe);
 
-                return RedirectToAction("Index");
+                    return RedirectToAction("VerSinpes", "Cajas", new { telefono = sinpe.TelefonoDestinatario }); 
                 }
 
                catch (Exception ex)
@@ -148,5 +148,29 @@ namespace BancoLosPatitos.Controllers
             }
             base.Dispose(disposing);
         }
+
+
+        [HttpPost]
+        public ActionResult SincronizarSinpe(int id)
+        {
+            var sinpe = db.Sinpes.Find(id);
+            if (sinpe != null && sinpe.Estado == 0)
+            {
+                sinpe.Estado = 1; // Cambiar a sincronizado
+                db.SaveChanges();
+                TempData["mensaje"] = "SINPE sincronizado correctamente.";
+                return RedirectToAction("VerSinpes", "Cajas", new { telefono = sinpe.TelefonoDestinatario });
+            }
+            else
+            {
+                TempData["mensaje"] = "Este SINPE ya estaba sincronizado o no existe.";
+                return RedirectToAction("VerSinpes", "Cajas", new { telefono = sinpe.TelefonoDestinatario });
+
+            }
+        }
+
+
+
+
     }
 }

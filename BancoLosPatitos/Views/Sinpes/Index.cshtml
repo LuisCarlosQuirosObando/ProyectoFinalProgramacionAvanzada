@@ -6,8 +6,7 @@
 
 <h2>SINPES</h2>
 <p>
-    @Html.ActionLink("Crear Nuevo", "Create", null, new { @class = "btn btn-outline-success" })
-
+    @Html.ActionLink("Crear Nuevo", "Create", "Sinpes", null, new { @class = "btn btn-outline-success" })
 </p>
 
 @if (Request.QueryString["telefono"] != null)
@@ -37,13 +36,13 @@
 <table class="table">
     <tr>
         <th>
-           Telefono de origen
+            Telefono de origen
         </th>
         <th>
-           Nombre de origen
+            Nombre de origen
         </th>
         <th>
-           Telefono del destinatario
+            Telefono del destinatario
         </th>
         <th>
             Nombre del destinatario
@@ -90,9 +89,24 @@
             <td>
                 @(item.Estado == 1 ? "Sincronizado" : "No sincronizado")
             </td>
-            
+
+            <td>
+                @if (item.Estado == 0)
+                {
+                    using (Html.BeginForm("SincronizarSinpe", "Sinpes", FormMethod.Post, new { style = "display:inline;" }))
+                    {
+                        @Html.Hidden("id", item.IdSinpe)
+                        <button type="submit" class="btn btn-sm btn-success">Sincronizar</button>
+                    }
+                }
+                else
+                {
+                    <span class="text-muted">✔</span>
+                }
+            </td>
         </tr>
     }
+
 
 </table>
 <div>
