@@ -1,63 +1,66 @@
 ﻿@model IEnumerable<BancoLosPatitos.Models.Reporte>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Reportes";
 }
 
-<h2>Index</h2>
+<h2>Reportes</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+@using (Html.BeginForm("GenerarReportes", "Reportes", FormMethod.Post, new { @class = "form-inline" }))
+{
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-success">
+        <i class="bi bi-bar-chart-line"></i> Generar reporte
+    </button>
+}
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Comercio.Identificacion)
+            @Html.DisplayNameFor(model => model.Comercio.Nombre)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CantidadDeCajas)
+            Cantidad de cajas
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.MontoTotalRecaudado)
+            Monto Total Recaudado
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CantidadDeSINPES)
+            Cantidad De SINPES
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.MontoTotalComision)
+            Monto Total De Comision
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FechaDelReporte)
+            Fecha Del Reporte
         </th>
-        <th></th>
+
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Comercio.Identificacion)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CantidadDeCajas)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.MontoTotalRecaudado)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CantidadDeSINPES)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.MontoTotalComision)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FechaDelReporte)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.IdReporte }) |
-            @Html.ActionLink("Details", "Details", new { id=item.IdReporte }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.IdReporte })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comercio.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CantidadDeCajas)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MontoTotalRecaudado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CantidadDeSINPES)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MontoTotalComision)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaDelReporte)
+            </td>
+        </tr>
+    }
 
 </table>
+<div>
+    @Html.ActionLink("Regresar a menu principal", "Index", "Home")
+</div>

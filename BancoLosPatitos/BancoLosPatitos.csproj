@@ -220,10 +220,6 @@
     <Content Include="Views\ConfiguracionComercios\Details.cshtml" />
     <Content Include="Views\ConfiguracionComercios\Edit.cshtml" />
     <Content Include="Views\ConfiguracionComercios\Index.cshtml" />
-    <Content Include="Views\Reportes\Create.cshtml" />
-    <Content Include="Views\Reportes\Delete.cshtml" />
-    <Content Include="Views\Reportes\Details.cshtml" />
-    <Content Include="Views\Reportes\Edit.cshtml" />
     <Content Include="Views\Reportes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>

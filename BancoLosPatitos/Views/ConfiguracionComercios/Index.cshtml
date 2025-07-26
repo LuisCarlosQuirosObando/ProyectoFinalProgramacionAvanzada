@@ -1,44 +1,61 @@
 ﻿@model IEnumerable<BancoLosPatitos.Models.ConfiguracionComercio>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Configuracion de Comercios";
 }
 
-<h2>Index</h2>
+<h2>Configuracion de Comercios</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Configurar Comercio", "Create")
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Comercio.Identificacion)
+            Nombre Del Comercio
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TipoConfiguracion)
+            Tipo De Configuracion
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Comision)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FechaDeRegistro)
+            Fecha De Registro
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FechaDeModificacion)
+            Fecha De Modificacion
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Estado)
         </th>
-        <th></th>
+        <th>
+            Acciones
+        </th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Comercio.Identificacion)
+            @Html.DisplayFor(modelItem => item.Comercio.Nombre)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.TipoConfiguracion)
+            @{
+                string TipoConfiguracionTexto = "";
+                switch (item.TipoConfiguracion)
+                {
+                    case 1:
+                        TipoConfiguracionTexto = "Plataforma";
+                        break;
+                    case 2:
+                        TipoConfiguracionTexto = "Externa";
+                        break;
+                    default:
+                        TipoConfiguracionTexto = "Ambas";
+                        break;
+                }
+            }
+            @TipoConfiguracionTexto
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Comision)
@@ -50,14 +67,15 @@
             @Html.DisplayFor(modelItem => item.FechaDeModificacion)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Estado)
+            @(item.Estado == 1 ? "Activo" : "Inactivo")
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.IdConfiguracion }) |
-            @Html.ActionLink("Details", "Details", new { id=item.IdConfiguracion }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.IdConfiguracion })
+            @Html.ActionLink("Editar", "Edit", new { id=item.IdConfiguracion }) 
         </td>
     </tr>
 }
 
 </table>
+<div>
+    @Html.ActionLink("Regresar a comercios", "Index", "Comercios")
+</div>

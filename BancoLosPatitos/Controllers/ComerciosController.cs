@@ -100,7 +100,7 @@ namespace BancoLosPatitos.Controllers
                 return HttpNotFound();
             }
             ViewBag.TiposDeComercios = new SelectList(new[]
-{
+            {
                  new { Valor = 1, Nombre = "Restaurantes" },
                  new { Valor = 2, Nombre = "Supermercados" },
                  new { Valor = 3, Nombre = "Ferreterías" },

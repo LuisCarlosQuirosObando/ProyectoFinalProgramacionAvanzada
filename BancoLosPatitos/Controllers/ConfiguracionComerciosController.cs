@@ -39,7 +39,24 @@ namespace BancoLosPatitos.Controllers
         // GET: ConfiguracionComercios/Create
         public ActionResult Create()
         {
-            ViewBag.IdComercio = new SelectList(db.Comercios, "IdComercio", "Identificacion");
+            var comerciosConfigurados = db.ConfiguracionComercios
+                .Select(c => c.IdComercio)
+                .Distinct()
+                .ToList();
+
+            var comerciosDisponibles = db.Comercios
+                .Where(c => !comerciosConfigurados.Contains(c.IdComercio))
+                .ToList();
+
+            ViewBag.IdComercio = new SelectList(comerciosDisponibles, "IdComercio", "Identificacion");
+
+            ViewBag.TipoConfiguracion = new SelectList(new[]
+            {
+                new { Valor = 1, Nombre = "Plataforma" },
+                new { Valor = 2, Nombre = "Externa" },
+                new { Valor = 3, Nombre = "Ambas" }
+            }, "Valor", "Nombre");
+
             return View();
         }
 
@@ -52,6 +69,9 @@ namespace BancoLosPatitos.Controllers
         {
             if (ModelState.IsValid)
             {
+                configuracionComercio.FechaDeRegistro = DateTime.Now;
+                configuracionComercio.FechaDeModificacion = DateTime.Now;
+                configuracionComercio.Estado = 1;
                 db.ConfiguracionComercios.Add(configuracionComercio);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -73,7 +93,20 @@ namespace BancoLosPatitos.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.IdComercio = new SelectList(db.Comercios, "IdComercio", "Identificacion", configuracionComercio.IdComercio);
+
+            ViewBag.TipoConfiguraciones = new SelectList(new[]
+            {
+                 new { Valor = 1, Nombre = "Plataforma" },
+                 new { Valor = 2, Nombre = "Externa" },
+                 new { Valor = 3, Nombre = "Ambas" } 
+             }, "Valor", "Nombre");
+
+            ViewBag.Estados = new SelectList(new[]
+            {
+                 new { Valor = 1, Nombre = "Activo" },
+                 new { Valor = 0, Nombre = "Inactivo" }
+             }, "Valor", "Nombre");
+            
             return View(configuracionComercio);
         }
 
@@ -86,6 +119,7 @@ namespace BancoLosPatitos.Controllers
         {
             if (ModelState.IsValid)
             {
+                configuracionComercio.FechaDeModificacion = DateTime.Now;
                 db.Entry(configuracionComercio).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

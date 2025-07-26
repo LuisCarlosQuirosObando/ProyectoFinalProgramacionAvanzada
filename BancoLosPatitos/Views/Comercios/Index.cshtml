@@ -37,75 +37,79 @@
         </th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Identificacion)
-        </td>
-        <td>
-            @{
-                string TipoIdentificacionTexto = "";
-                switch (item.TipoIdentificacion)
-                {
-                    case 1:
-                        TipoIdentificacionTexto = "Física";
-                        break;
-                    case 2:
-                        TipoIdentificacionTexto = "Jurídica";
-                        break;
-                    default:
-                        TipoIdentificacionTexto = "Desconocida";
-                        break;
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Identificacion)
+            </td>
+            <td>
+                @{
+                    string TipoIdentificacionTexto = "";
+                    switch (item.TipoIdentificacion)
+                    {
+                        case 1:
+                            TipoIdentificacionTexto = "Física";
+                            break;
+                        case 2:
+                            TipoIdentificacionTexto = "Jurídica";
+                            break;
+                        default:
+                            TipoIdentificacionTexto = "Desconocida";
+                            break;
+                    }
                 }
-            }
-            @TipoIdentificacionTexto
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Nombre)
-        </td>
-        <td>
-            @{
-                string TipoDeComercioTexto = "";
-                switch (item.TipoDeComercio)
-                {
-                    case 1:
-                        TipoDeComercioTexto = "Restaurantes";
-                        break;
-                    case 2:
-                        TipoDeComercioTexto = "Supermercados";
-                        break;
-                    case 3:
-                        TipoDeComercioTexto = "Ferreterías";
-                        break;
-                    default:
-                        TipoDeComercioTexto = "Otros";
-                        break;
+                @TipoIdentificacionTexto
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @{
+                    string TipoDeComercioTexto = "";
+                    switch (item.TipoDeComercio)
+                    {
+                        case 1:
+                            TipoDeComercioTexto = "Restaurantes";
+                            break;
+                        case 2:
+                            TipoDeComercioTexto = "Supermercados";
+                            break;
+                        case 3:
+                            TipoDeComercioTexto = "Ferreterías";
+                            break;
+                        default:
+                            TipoDeComercioTexto = "Otros";
+                            break;
+                    }
                 }
-            }
-            @TipoDeComercioTexto          
+                @TipoDeComercioTexto
 
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Telefono)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CorreoElectronico)
-        </td>
-        <td>
-            @(item.Estado == 1 ? "Activo" : "Inactivo")
-        </td>
-        <td>
-            @Html.ActionLink("Editar", "Edit", new { id = item.IdComercio }) |
-            @Html.ActionLink("Detalles", "Details", new { id = item.IdComercio }) |
-            @Html.ActionLink("Ver cajas", "Index", "Cajas", new { idComercio = item.IdComercio }, null)
-
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefono)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CorreoElectronico)
+            </td>
+            <td>
+                @(item.Estado == 1 ? "Activo" : "Inactivo")
+            </td>
+            <td>
+                @Html.ActionLink("Editar", "Edit", new { id = item.IdComercio }) |
+                @Html.ActionLink("Detalles", "Details", new { id = item.IdComercio }) |
+                @Html.ActionLink("Ver cajas", "Index", "Cajas", new { idComercio = item.IdComercio }, null)
 
 
-        </td>
-    </tr>
-}
+
+            </td>
+        </tr>
+    }
 
 </table>
+<div>
+    @Html.ActionLink("⚙ Ir a configuración de comercios", "Index", "ConfiguracionComercios", null, new { @class = "btn btn-secondary me-2" })
+</div>
 <div>
     @Html.ActionLink("Regresar a menu principal", "Index", "Home")
 </div>
