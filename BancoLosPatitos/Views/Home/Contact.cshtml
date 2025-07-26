@@ -1,19 +1,32 @@
 ﻿@{
-    ViewBag.Title = "Contact";
+    ViewBag.Title = "Contacto";
 }
-<main aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title.</h2>
-    <h3>@ViewBag.Message</h3>
-
-    <address>
-        One Microsoft Way<br />
-        Redmond, WA 98052-6399<br />
-        <abbr title="Phone">P:</abbr>
-        425.555.0100
-    </address>
-
-    <address>
-        <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-        <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-    </address>
+<main class="container mt-4" aria-labelledby="title">
+    <div class="card p-4 shadow">
+        <h2 id="title" class="mb-3">@ViewBag.Title</h2>
+        <h4 class="text-muted">@ViewBag.Message</h4>
+        <hr />
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h5>Información de contactos</h5>
+                <address>
+                    <strong>Banco Los Patitos</strong><br/>
+                    Universidad Fidélitas<br/>
+                    San José, Costa Rica<br/>
+                    Tel: +506 2256-2222<br />
+                </address>
+            </div>
+            <div class="col-md-6">
+                <h5>Correos electrónicos</h5>
+                <address>
+                    <strong>Soporte:</strong> <a href="mailto:lquiros460787@ufide.ac.cr">lquiros460787@ufide.ac.cr</a><br/>
+                    <strong>Soporte:</strong> <a href="mailto:gbrenes80867@ufide.ac.cr">gbrenes80867@ufide.ac.cr</a>
+                </address>
+            </div>
+        </div>
+    </div>
 </main>
+
+<div>
+    @Html.ActionLink("Regresar a menu principal", "Index", "Home")
+</div>

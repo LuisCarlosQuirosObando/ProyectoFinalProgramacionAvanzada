@@ -48,11 +48,35 @@ namespace BancoLosPatitos.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "IdSinpe,TelefonoOrigen,NombreOrigen,TelefonoDestinatario,NombreDestinatario,Monto,FechaDeRegistro,Descripcion,Estado")] Sinpe sinpe)
         {
+            var cajaDestino = db.Cajas.FirstOrDefault(c => c.TelefonoSINPE == sinpe.TelefonoDestinatario);
+            if (cajaDestino == null)
+            {
+                ModelState.AddModelError("TelefonoDestinatario", "No existe una caja con este número de teléfono.");
+            }
+            else if (cajaDestino.Estado != 1) 
+            {
+                ModelState.AddModelError("TelefonoDestinatario", "No se puede realizar pagos hacia una caja inactiva.");
+            }
+
             if (ModelState.IsValid)
             {
+               try
+                {
+                sinpe.Estado = 0;
+                sinpe.FechaDeRegistro = DateTime.Now;
                 db.Sinpes.Add(sinpe);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+
+                Helpers.BitacoraHelper.RegistrarEvento(db, "SINPES", "Registrar", sinpe);
+
+                    return RedirectToAction("VerSinpes", "Cajas", new { telefono = sinpe.TelefonoDestinatario }); 
+                }
+
+               catch (Exception ex)
+                {
+                    Helpers.BitacoraHelper.RegistrarError(db, "Sinpes", ex);
+                    ModelState.AddModelError("", "Ocurrió un error al crear SINPE.");
+                }
             }
 
             return View(sinpe);
@@ -82,6 +106,7 @@ namespace BancoLosPatitos.Controllers
         {
             if (ModelState.IsValid)
             {
+
                 db.Entry(sinpe).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -123,5 +148,29 @@ namespace BancoLosPatitos.Controllers
             }
             base.Dispose(disposing);
         }
+
+
+        [HttpPost]
+        public ActionResult SincronizarSinpe(int id)
+        {
+            var sinpe = db.Sinpes.Find(id);
+            if (sinpe != null && sinpe.Estado == 0)
+            {
+                sinpe.Estado = 1; // Cambiar a sincronizado
+                db.SaveChanges();
+                TempData["mensaje"] = "SINPE sincronizado correctamente.";
+                return RedirectToAction("VerSinpes", "Cajas", new { telefono = sinpe.TelefonoDestinatario });
+            }
+            else
+            {
+                TempData["mensaje"] = "Este SINPE ya estaba sincronizado o no existe.";
+                return RedirectToAction("VerSinpes", "Cajas", new { telefono = sinpe.TelefonoDestinatario });
+
+            }
+        }
+
+
+
+
     }
 }

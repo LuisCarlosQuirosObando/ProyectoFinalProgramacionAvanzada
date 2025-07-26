@@ -121,20 +121,25 @@
     <Compile Include="Controllers\BitacorasController.cs" />
     <Compile Include="Controllers\CajasController.cs" />
     <Compile Include="Controllers\ComerciosController.cs" />
+    <Compile Include="Controllers\ConfiguracionComerciosController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ReportesController.cs" />
     <Compile Include="Controllers\SinpesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202506291756202_Inicial.cs" />
-    <Compile Include="Migrations\202506291756202_Inicial.Designer.cs">
-      <DependentUpon>202506291756202_Inicial.cs</DependentUpon>
+    <Compile Include="Helpers\BitacoraHelper.cs" />
+    <Compile Include="Migrations\202507210351297_Inicial.cs" />
+    <Compile Include="Migrations\202507210351297_Inicial.Designer.cs">
+      <DependentUpon>202507210351297_Inicial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Bitacora.cs" />
     <Compile Include="Models\Caja.cs" />
     <Compile Include="Models\Comercio.cs" />
+    <Compile Include="Models\ConfiguracionComercio.cs" />
     <Compile Include="Models\PatitosContext.cs" />
+    <Compile Include="Models\Reporte.cs" />
     <Compile Include="Models\Sinpe.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -204,11 +209,18 @@
     <Content Include="Views\Comercios\Details.cshtml" />
     <Content Include="Views\Comercios\Edit.cshtml" />
     <Content Include="Views\Comercios\Index.cshtml" />
+    <Content Include="Views\Comercios\ValidarIdentificacion.cshtml" />
     <Content Include="Views\Sinpes\Create.cshtml" />
     <Content Include="Views\Sinpes\Delete.cshtml" />
     <Content Include="Views\Sinpes\Details.cshtml" />
     <Content Include="Views\Sinpes\Edit.cshtml" />
     <Content Include="Views\Sinpes\Index.cshtml" />
+    <Content Include="Views\ConfiguracionComercios\Create.cshtml" />
+    <Content Include="Views\ConfiguracionComercios\Delete.cshtml" />
+    <Content Include="Views\ConfiguracionComercios\Details.cshtml" />
+    <Content Include="Views\ConfiguracionComercios\Edit.cshtml" />
+    <Content Include="Views\ConfiguracionComercios\Index.cshtml" />
+    <Content Include="Views\Reportes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -241,8 +253,8 @@
     <Content Include="Scripts\jquery-3.7.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202506291756202_Inicial.resx">
-      <DependentUpon>202506291756202_Inicial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202507210351297_Inicial.resx">
+      <DependentUpon>202507210351297_Inicial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

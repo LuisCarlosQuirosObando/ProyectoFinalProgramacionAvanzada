@@ -15,9 +15,19 @@ namespace BancoLosPatitos.Controllers
         private PatitosContext db = new PatitosContext();
 
         // GET: Cajas
-        public ActionResult Index()
+        public ActionResult Index(int? idComercio)
         {
             var cajas = db.Cajas.Include(c => c.Comercio);
+
+            if (idComercio.HasValue)
+            {
+                cajas = cajas.Where(c => c.IdComercio == idComercio.Value);
+                ViewBag.FiltroComercio = db.Comercios
+                    .Where(c => c.IdComercio == idComercio.Value)
+                    .Select(c => c.Nombre)
+                    .FirstOrDefault();
+            }
+
             return View(cajas.ToList());
         }
 
@@ -52,9 +62,40 @@ namespace BancoLosPatitos.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Cajas.Add(caja);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                
+                bool existeNombre = db.Cajas.Any(c => c.Nombre == caja.Nombre && c.IdComercio == caja.IdComercio);            
+                bool existeTelefono = db.Cajas.Any(c => c.TelefonoSINPE == caja.TelefonoSINPE);
+
+                if (existeNombre)
+                {
+                    ModelState.AddModelError("Nombre", "Ya existe una caja con este nombre para este comercio.");
+                }
+
+                if (existeTelefono)
+                {
+                    ModelState.AddModelError("TelefonoSINPE", "Ya existe una caja registrada con este número de SINPE.");
+                }
+
+                if (!existeNombre && !existeTelefono)
+                {
+                    caja.FechaDeRegistro = DateTime.Now;
+                    caja.FechaDeModificacion = DateTime.Now;
+                    db.Cajas.Add(caja);
+                    db.SaveChanges();
+
+                    Helpers.BitacoraHelper.RegistrarEvento(db, "Cajas", "Registrar", caja);
+
+                    return RedirectToAction("Index");
+                }
+                }
+
+                catch (Exception ex)
+                {
+                    Helpers.BitacoraHelper.RegistrarError(db, "Cajas", ex);
+                    ModelState.AddModelError("", "Ocurrió un error al crear caja.");
+                }
             }
 
             ViewBag.IdComercio = new SelectList(db.Comercios, "IdComercio", "Identificacion", caja.IdComercio);
@@ -82,14 +123,35 @@ namespace BancoLosPatitos.Controllers
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "IdCaja,IdComercio,Nombre,Descripcion,TelefonoSINPE,FechaDeRegistro,FechaDeModificacion,Estado")] Caja caja)
+        public ActionResult Edit([Bind(Include = "IdCaja,IdComercio,Nombre,Descripcion,TelefonoSINPE,FechaDeRegistro,Estado")] Caja caja)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(caja).State = EntityState.Modified;
+                try {
+                var datosAnteriores = db.Cajas.AsNoTracking().FirstOrDefault(c => c.IdCaja == caja.IdCaja);
+                var cajaActual = db.Cajas.Find(caja.IdCaja);
+                if (cajaActual == null) return HttpNotFound();
+
+                cajaActual.Nombre = caja.Nombre;
+                cajaActual.Descripcion = caja.Descripcion;
+                cajaActual.TelefonoSINPE = caja.TelefonoSINPE;
+                cajaActual.Estado = caja.Estado;
+               
+                cajaActual.FechaDeModificacion = DateTime.Now;
+
                 db.SaveChanges();
+
+                Helpers.BitacoraHelper.RegistrarEvento(db, "Cajas", "Modificar", datosAnteriores, caja, "");
+
                 return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    Helpers.BitacoraHelper.RegistrarError(db, "Cajas", ex);
+                    ModelState.AddModelError("", "Ocurrió un error al editar caja.");
+                }
             }
+
             ViewBag.IdComercio = new SelectList(db.Comercios, "IdComercio", "Identificacion", caja.IdComercio);
             return View(caja);
         }
@@ -118,6 +180,20 @@ namespace BancoLosPatitos.Controllers
             db.Cajas.Remove(caja);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+
+        public ActionResult VerSinpes(string telefono)
+        {
+            if (string.IsNullOrEmpty(telefono))
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var sinpes = db.Sinpes
+                .Where(s => s.TelefonoDestinatario == telefono)
+                .OrderByDescending(s => s.FechaDeRegistro)
+                .ToList();
+
+            return View("~/Views/Sinpes/Index.cshtml", sinpes);
         }
 
         protected override void Dispose(bool disposing)

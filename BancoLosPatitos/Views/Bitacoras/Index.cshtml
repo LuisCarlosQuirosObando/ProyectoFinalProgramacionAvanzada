@@ -1,24 +1,24 @@
 ﻿@model IEnumerable<BancoLosPatitos.Models.Bitacora>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Modulo de bitacora";
 }
 
-<h2>Index</h2>
+<h2>Bitacora de movimientos</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.TablaDeEvento)
+            ID De Evento
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TipoDeEvento)
+            Tabla De Evento
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FechaDeEvento)
+            Tipo De Evento
+        </th>
+        <th>
+            Fecha De Evento
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Descripcion)
@@ -27,16 +27,19 @@
             @Html.DisplayNameFor(model => model.StackTrace)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DatosAnteriores)
+            Datos Anteriores
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DatosPosteriores)
+            Datos Posteriores
         </th>
-        <th></th>
+
     </tr>
 
 @foreach (var item in Model) {
     <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.IdEvento)
+        </td>
         <td>
             @Html.DisplayFor(modelItem => item.TablaDeEvento)
         </td>
@@ -53,17 +56,19 @@
             @Html.DisplayFor(modelItem => item.StackTrace)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.DatosAnteriores)
+            <div style="font-size: 15px; max-height: 60px; max-width: 200px; overflow: auto; white-space: nowrap;">
+                @Html.DisplayFor(modelItem => item.DatosAnteriores)
+            </div>
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.DatosPosteriores)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.IdEvento }) |
-            @Html.ActionLink("Details", "Details", new { id=item.IdEvento }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.IdEvento })
+            <div style="font-size: 15px; max-height: 60px; max-width: 200px; overflow: auto; white-space: nowrap;">
+                @Html.DisplayFor(modelItem => item.DatosPosteriores)
+            </div>
         </td>
     </tr>
 }
 
 </table>
+<div>
+    @Html.ActionLink("Regresar a menu principal", "Index", "Home")
+</div>

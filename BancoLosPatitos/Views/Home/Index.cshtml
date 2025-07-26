@@ -1,33 +1,47 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Inicio";
 }
 
-<main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-        <p><a href="https://asp.net" class="btn btn-primary btn-md">Learn more &raquo;</a></p>
-    </section>
+<main class="container mt-4">
+    <div class="jumbotron bg-light p-5 rounded shadow-sm">
+        <h1 class="display-4"><i class="bi bi-bank2 text-primary"></i> Bienvenido al Banco Los Patitos</h1>
+        <p class="lead">
+            Esta plataforma le permite gestionar de forma eficiente los comercios afiliados, sus cajas, transacciones SINPE y más.
+        </p>
+        <hr class="my-4" />
+        <p>
+            Registra comercios con un solo click.
+        </p>
+        <a class="btn btn-primary btn-lg" href="@Url.Action("Index", "Comercios")" role="button"><i class="bi bi-shop"></i> Ir a Comercios</a>
+    </div>
 
-    <div class="row">
-        <section class="col-md-4" aria-labelledby="gettingStartedTitle">
-            <h2 id="gettingStartedTitle">Getting started</h2>
-            <p>
-                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-                enables a clean separation of concerns and gives you full control over markup
-                for enjoyable, agile development.
-            </p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="librariesTitle">
-            <h2 id="librariesTitle">Get more libraries</h2>
-            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="hostingTitle">
-            <h2 id="hostingTitle">Web Hosting</h2>
-            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-        </section>
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-credit-card-2-front text-success"></i> Gestión SINPE</h5>
+                    <p class="card-text">Registra transacciones SINPE asociadas a comercios.</p>
+                    <a href="@Url.Action("Index", "Sinpes")" class="btn btn-outline-success">Ir a SINPE</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mt-3 mt-md-0">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-journal-text"></i>Bitácora</h5>
+                    <p class="card-text">Verifica la bitácora.</p>
+                    <a href="@Url.Action("Index", "Bitacoras")" class="btn btn-outline-warning">Ver Bitácora</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mt-3 mt-md-0">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-people text-info"></i> Soporte y Ayuda</h5>
+                    <p class="card-text">¿Tenés preguntas o necesitás soporte?</p>
+                    <a href="@Url.Action("Contact", "Home")" class="btn btn-outline-info">Contáctenos</a>
+                </div>
+            </div>
+        </div>
     </div>
 </main>

@@ -1,10 +1,10 @@
 ﻿@model BancoLosPatitos.Models.Sinpe
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Editar";
 }
 
-<h2>Edit</h2>
+<h2>Editar</h2>
 
 
 @using (Html.BeginForm())
@@ -76,7 +76,13 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Estado, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Estado, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownListFor(model => model.Estado,
+                @Html.DropDownListFor(model => model.Estado,
+                new SelectList(new[] {
+                    new { Value = 1, Text = "Activo" },
+                    new { Value = 0, Text = "Inactivo" }
+                }, "Value", "Text", Model != null ? Model.Estado : 1), 
+                htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -90,7 +96,7 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Regresar", "Index")
 </div>
 
 @section Scripts {

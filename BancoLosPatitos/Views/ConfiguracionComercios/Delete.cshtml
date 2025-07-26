@@ -1,14 +1,14 @@
-﻿@model BancoLosPatitos.Models.Caja
+﻿@model BancoLosPatitos.Models.ConfiguracionComercio
 
 @{
-    ViewBag.Title = "Borrar";
+    ViewBag.Title = "Delete";
 }
 
-<h2>Borrar Caja</h2>
+<h2>Delete</h2>
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Caja</h4>
+    <h4>ConfiguracionComercio</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -20,27 +20,19 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Nombre)
+            @Html.DisplayNameFor(model => model.TipoConfiguracion)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Nombre)
+            @Html.DisplayFor(model => model.TipoConfiguracion)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Descripcion)
+            @Html.DisplayNameFor(model => model.Comision)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Descripcion)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.TelefonoSINPE)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TelefonoSINPE)
+            @Html.DisplayFor(model => model.Comision)
         </dd>
 
         <dt>
@@ -74,7 +66,7 @@
 
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Regresar", "Index")
+            @Html.ActionLink("Back to List", "Index")
         </div>
     }
 </div>

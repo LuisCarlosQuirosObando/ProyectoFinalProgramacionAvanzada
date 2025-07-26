@@ -19,6 +19,9 @@ namespace BancoLosPatitos.Models
         public DbSet<Sinpe> Sinpes { get; set; }
         public DbSet<Bitacora> Bitacoras { get; set; }
 
+        public DbSet<ConfiguracionComercio> ConfiguracionComercios { get; set; }
+
+        public DbSet<Reporte> Reportes { get; set; }
 
     }
 }

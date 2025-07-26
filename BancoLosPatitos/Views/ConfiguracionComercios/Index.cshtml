@@ -1,0 +1,81 @@
+﻿@model IEnumerable<BancoLosPatitos.Models.ConfiguracionComercio>
+
+@{
+    ViewBag.Title = "Configuracion de Comercios";
+}
+
+<h2>Configuracion de Comercios</h2>
+
+<p>
+    @Html.ActionLink("Configurar Comercio", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Nombre Del Comercio
+        </th>
+        <th>
+            Tipo De Configuracion
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Comision)
+        </th>
+        <th>
+            Fecha De Registro
+        </th>
+        <th>
+            Fecha De Modificacion
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Estado)
+        </th>
+        <th>
+            Acciones
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Comercio.Nombre)
+        </td>
+        <td>
+            @{
+                string TipoConfiguracionTexto = "";
+                switch (item.TipoConfiguracion)
+                {
+                    case 1:
+                        TipoConfiguracionTexto = "Plataforma";
+                        break;
+                    case 2:
+                        TipoConfiguracionTexto = "Externa";
+                        break;
+                    default:
+                        TipoConfiguracionTexto = "Ambas";
+                        break;
+                }
+            }
+            @TipoConfiguracionTexto
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Comision)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaDeRegistro)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaDeModificacion)
+        </td>
+        <td>
+            @(item.Estado == 1 ? "Activo" : "Inactivo")
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new { id=item.IdConfiguracion }) 
+        </td>
+    </tr>
+}
+
+</table>
+<div>
+    @Html.ActionLink("Regresar a comercios", "Index", "Comercios")
+</div>

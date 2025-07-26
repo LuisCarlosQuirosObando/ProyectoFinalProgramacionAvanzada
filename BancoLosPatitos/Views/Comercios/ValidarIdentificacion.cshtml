@@ -1,0 +1,36 @@
+﻿@model BancoLosPatitos.Models.Comercio
+
+@{
+    ViewBag.Title = "Validar Identificacion del Comercio";
+}
+
+<h2>Validar Identificacion</h2>
+
+
+@using (Html.BeginForm("ValidarIdentificacion", "Comercios", FormMethod.Post))
+{
+    <div class="form-group">
+        <label for="identificacion">Ingrese la identificación</label>
+        <div class="input-group">
+            <input type="text" name="identificacion" id="identificacion" class="form-control" placeholder="Ej. 3101005544" required />
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-success">Validar</button>
+            </span>
+        </div>
+    </div>
+}
+
+@if (ViewBag.IdentificacionNueva != null)
+{
+    <div class="alert alert-warning">
+        @ViewBag.IdentificacionNueva
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Regresar", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -15,14 +15,14 @@ namespace BancoLosPatitos.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "Aplicación del Banco Los Patitos.";
 
             return View();
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "¡Contacta a nuestro equipo de trabajo!";
 
             return View();
         }
