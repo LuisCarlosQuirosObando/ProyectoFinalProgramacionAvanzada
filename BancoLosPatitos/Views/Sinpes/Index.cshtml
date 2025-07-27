@@ -6,29 +6,39 @@
 
 <h2>SINPES</h2>
 <p>
-    @Html.ActionLink("Crear Nuevo", "Create", "Sinpes", null, new { @class = "btn btn-outline-success" })
-</p>
-
-@if (Request.QueryString["telefono"] != null)
-{
-    <div class="row align-items-center mb-3">
-        <div class="col-md-6">
-            <h5 class="mb-0 text-primary">
+    
+    <div class="col-md-6 text-start">
+        @if (Request.QueryString["telefono"] != null)
+        {
+            <h5 class="text-primary mb-0" dir="rtl">
                 SINPE recibidos en caja: @Request.QueryString["telefono"]
             </h5>
-        </div>
-        <div class="col-md-6 text-right">
-            @using (Html.BeginForm("VerSinpes", "Cajas", FormMethod.Get))
-            {
-                <div class="form-inline justify-content-end">
-                    <label for="telefono" class="mr-2">Buscar SINPE:</label>
-                    <input type="number" id="telefono" name="telefono" class="form-control mr-2" placeholder="Teléfono" required />
-                    <button type="submit" class="btn btn-success">Buscar</button>
-                </div>
-            }
-        </div>
+        }
     </div>
-}
+</p>
+
+<div class="row align-items-center mb-3">
+    <div class="col-md-6">
+        @using (Html.BeginForm("VerSinpes", "Cajas", FormMethod.Get))
+        {
+            <div class="form-inline">
+                <label for="telefono" class="mr-2">Buscar SINPE:</label>
+                <input type="number" id="telefono" name="telefono" class="form-control mr-2" placeholder="Teléfono" required />
+                <button type="submit" class="btn btn-success">Buscar</button>
+            </div>
+        }
+    </div>
+
+    <div class="col-md-6 text-end">
+        @Html.ActionLink("Crear Nuevo", "Create", "Sinpes", null, new { @class = "btn btn-outline-success" })
+    </div>
+
+</div>
+
+
+
+
+
 
 
 

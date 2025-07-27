@@ -1,0 +1,115 @@
+﻿@model IEnumerable<BancoLosPatitos.Models.Usuarios>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Usuarios</h2>
+
+<p>
+    <div class="col-md-6 text-start">
+
+        @if (Request.QueryString["identificacion"] != null)
+        {
+            <h5 class="text-primary mb-0">
+                Identificador de Comercio: @Request.QueryString["identificacion"]
+            </h5>
+        }
+    </div>
+
+
+</p>
+
+<div class="row align-items-center mb-3">
+    <div class="col-md-6">
+        @using (Html.BeginForm("VerUsuarios", "Usuarios", FormMethod.Get))
+        {
+            <div class="form-inline">
+                <label for="identificacion" class="mr-2">Buscar Usuarios por Identificación de Comercio:</label>
+                <input type="text" id="identificacion" name="identificacion" class="form-control mr-2" placeholder="Identificación" required />
+                <button type="submit" class="btn btn-success">Buscar</button>
+            </div>
+        }
+    </div>
+
+    <div class="col-md-6 text-end">
+        @Html.ActionLink("Crear Usuario", "Create", null, new { @class = "btn btn-primary" })
+    </div>
+</div>
+
+
+<table class="table">
+    <tr>
+        <th>Comercio</th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Nombres)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PrimerApellido)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SegundoApellido)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Identificacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CorreoElectronico)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaDeRegistro)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaDeModificacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Estado)
+        </th>
+        <th>
+            Acciones
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Identificacion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombres)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PrimerApellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SegundoApellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Identificacion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CorreoElectronico)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaDeRegistro)
+            </td>
+            <td>
+                @(item.FechaDeModificacion.HasValue
+                    ? item.FechaDeModificacion.Value.ToString("dd-MMMM-yyyy HH:mm:ss")
+                    : "Sin modificar")
+            </td>
+            <td>
+                @(item.Estado ? "Activo" : "Inactivo")
+            </td>
+            <td>
+                @Html.ActionLink("Editar", "Edit", new { id = item.IdUsuario })
+            </td>
+        </tr>
+    }
+</table>
+<div>
+    @Html.ActionLink("Regresar", "Index", "Comercios")
+</div>

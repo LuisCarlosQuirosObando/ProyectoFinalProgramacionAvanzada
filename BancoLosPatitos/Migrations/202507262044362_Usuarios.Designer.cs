@@ -7,13 +7,13 @@ namespace BancoLosPatitos.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.5.1")]
-    public sealed partial class Inicial : IMigrationMetadata
+    public sealed partial class Usuarios : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Inicial));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Usuarios));
         
         string IMigrationMetadata.Id
         {
-            get { return "202507210351297_Inicial"; }
+            get { return "202507262044362_Usuarios"; }
         }
         
         string IMigrationMetadata.Source
