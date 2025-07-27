@@ -63,13 +63,8 @@
 
     @Html.HiddenFor(model => model.FechaDeRegistro)
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.FechaDeModificacion, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(model => model.FechaDeModificacion, new { @class = "form-control", @readonly = "readonly" })
-            @Html.ValidationMessageFor(model => model.FechaDeModificacion, "", new { @class = "text-danger" })
-        </div>
-    </div>
+    @Html.HiddenFor(model => model.FechaDeModificacion)
+
 
     <div class="form-group">
         @Html.LabelFor(model => model.Estado, htmlAttributes: new { @class = "control-label col-md-2" })

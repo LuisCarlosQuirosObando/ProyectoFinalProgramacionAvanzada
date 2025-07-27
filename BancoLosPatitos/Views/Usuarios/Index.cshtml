@@ -46,22 +46,22 @@
             @Html.DisplayNameFor(model => model.Nombres)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PrimerApellido)
+            Primer Apellido
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.SegundoApellido)
+           Segundo Apellido
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Identificacion)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CorreoElectronico)
+            Correo Electronico
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FechaDeRegistro)
+            Fecha De Registro
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FechaDeModificacion)
+            Fecha De Modificacion
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Estado)
@@ -76,7 +76,7 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Identificacion)
+                @Html.DisplayFor(modelItem => item.Comercio.Identificacion)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Nombres)
@@ -102,7 +102,7 @@
                     : "Sin modificar")
             </td>
             <td>
-                @(item.Estado ? "Activo" : "Inactivo")
+                @(item.Estado == 1 ? "Activo" : "Inactivo")
             </td>
             <td>
                 @Html.ActionLink("Editar", "Edit", new { id = item.IdUsuario })

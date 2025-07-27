@@ -67,9 +67,23 @@ namespace BancoLosPatitos.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Usuarios.Add(usuarios);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    usuarios.FechaDeRegistro = DateTime.Now;
+                    usuarios.FechaDeModificacion = DateTime.Now;
+                    usuarios.Estado = 1;
+                    db.Usuarios.Add(usuarios);
+                    db.SaveChanges();
+
+                    Helpers.BitacoraHelper.RegistrarEvento(db, "Usuarios", "Registrar", usuarios);
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    Helpers.BitacoraHelper.RegistrarError(db, "Usuarios", ex);
+                    ModelState.AddModelError("", "Ocurrió un error al crear usuario.");
+                }
+
             }
 
             ViewBag.IdComercio = new SelectList(db.Comercios, "IdComercio", "Identificacion", usuarios.IdComercio);
@@ -89,6 +103,13 @@ namespace BancoLosPatitos.Controllers
                 return HttpNotFound();
             }
             ViewBag.IdComercio = new SelectList(db.Comercios, "IdComercio", "Identificacion", usuarios.IdComercio);
+
+            ViewBag.Estados = new SelectList(new[]
+{
+                 new { Valor = 1, Nombre = "Activo" },
+                 new { Valor = 0, Nombre = "Inactivo" }
+             }, "Valor", "Nombre");
+
             return View(usuarios);
         }
 
@@ -101,21 +122,32 @@ namespace BancoLosPatitos.Controllers
         {
             if (ModelState.IsValid)
             {
-                var existente = db.Usuarios.Find(usuarios.IdUsuario);
-                if (existente == null)
-                    return HttpNotFound();
+                try
+                {
+                    var datosAnteriores = db.Usuarios.AsNoTracking().FirstOrDefault(c => c.IdUsuario == usuarios.IdUsuario);
 
-                // Solo actualiza los campos permitidos
-                existente.Nombres = usuarios.Nombres;
-                existente.PrimerApellido = usuarios.PrimerApellido;
-                existente.SegundoApellido = usuarios.SegundoApellido;
-                existente.Identificacion = usuarios.Identificacion;
-                existente.CorreoElectronico = usuarios.CorreoElectronico;
-                existente.Estado = usuarios.Estado;
-                existente.FechaDeModificacion = DateTime.Now;
+                    var existente = db.Usuarios.Find(usuarios.IdUsuario);
+                    if (existente == null)
+                        return HttpNotFound();
 
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                    existente.Nombres = usuarios.Nombres;
+                    existente.PrimerApellido = usuarios.PrimerApellido;
+                    existente.SegundoApellido = usuarios.SegundoApellido;
+                    existente.Identificacion = usuarios.Identificacion;
+                    existente.CorreoElectronico = usuarios.CorreoElectronico;
+                    existente.Estado = usuarios.Estado;
+                    existente.FechaDeModificacion = DateTime.Now;
+
+                    db.SaveChanges();
+
+                    Helpers.BitacoraHelper.RegistrarEvento(db, "Usuarios", "Modificar", datosAnteriores, usuarios, "");
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    Helpers.BitacoraHelper.RegistrarError(db, "Usuarios", ex);
+                    ModelState.AddModelError("", "Ocurrió un error al editar usuario.");
+                }
             }
 
             ViewBag.IdComercio = new SelectList(db.Comercios, "IdComercio", "Identificacion", usuarios.IdComercio);

@@ -120,62 +120,70 @@ namespace BancoLosPatitos.Controllers
             return RedirectToAction("Index");
         }
 
-        // En tu controlador ReportesController
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult GenerarReportes()
         {
             var fechaActual = DateTime.Now;
             var comercios = db.Comercios.ToList();
-
-            foreach (var comercio in comercios)
+            try
             {
-                var cajas = db.Cajas.Where(c => c.IdComercio == comercio.IdComercio && c.Estado == 1).ToList();
 
-                int cantidadDeCajas = cajas.Count();
-
-                var telefonosCajas = cajas.Select(c => c.TelefonoSINPE).Distinct().ToList();
-
-                var sinpes = db.Sinpes.Where(s =>telefonosCajas.Contains(s.TelefonoDestinatario)).ToList();
-
-                decimal montoRecaudado = sinpes.Sum(s => s.Monto);
-                int cantidadDeSINPES = sinpes.Count;
-
-                var configuracionComi = db.ConfiguracionComercios.FirstOrDefault(cc => cc.IdComercio == comercio.IdComercio && cc.Estado == 1);
-
-                decimal porcentajeComision = configuracionComi != null ? configuracionComi.Comision / 100m : 0m;
-                decimal montoComision = montoRecaudado * porcentajeComision;
-
-                var reporteExistente = db.Reportes.FirstOrDefault(r => r.IdComercio == comercio.IdComercio);
-
-                if (reporteExistente != null)
+                foreach (var comercio in comercios)
                 {
-                    reporteExistente.CantidadDeCajas = cantidadDeCajas;
-                    reporteExistente.MontoTotalRecaudado = montoRecaudado;
-                    reporteExistente.CantidadDeSINPES = cantidadDeSINPES;
-                    reporteExistente.MontoTotalComision = montoComision;
-                    reporteExistente.FechaDelReporte = fechaActual;
-                }
-                else
-                {
-                    var nuevoReporte = new Reporte
+                    var cajas = db.Cajas.Where(c => c.IdComercio == comercio.IdComercio && c.Estado == 1).ToList();
+
+                    int cantidadDeCajas = cajas.Count();
+
+                    var telefonosCajas = cajas.Select(c => c.TelefonoSINPE).Distinct().ToList();
+
+                    var sinpes = db.Sinpes.Where(s => telefonosCajas.Contains(s.TelefonoDestinatario)).ToList();
+
+                    decimal montoRecaudado = sinpes.Sum(s => s.Monto);
+                    int cantidadDeSINPES = sinpes.Count;
+
+                    var configuracionComi = db.ConfiguracionComercios.FirstOrDefault(cc => cc.IdComercio == comercio.IdComercio && cc.Estado == 1);
+
+                    decimal porcentajeComision = configuracionComi != null ? configuracionComi.Comision / 100m : 0m;
+                    decimal montoComision = montoRecaudado * porcentajeComision;
+
+                    var reporteExistente = db.Reportes.FirstOrDefault(r => r.IdComercio == comercio.IdComercio);
+
+                    if (reporteExistente != null)
                     {
-                        IdComercio = comercio.IdComercio,
-                        CantidadDeCajas = cantidadDeCajas,
-                        MontoTotalRecaudado = montoRecaudado,
-                        CantidadDeSINPES = cantidadDeSINPES,
-                        MontoTotalComision = montoComision,
-                        FechaDelReporte = fechaActual
-                    };
+                            reporteExistente.CantidadDeCajas = cantidadDeCajas;
+                            reporteExistente.MontoTotalRecaudado = montoRecaudado;
+                            reporteExistente.CantidadDeSINPES = cantidadDeSINPES;
+                            reporteExistente.MontoTotalComision = montoComision;
+                            reporteExistente.FechaDelReporte = fechaActual; 
+                    }
+                    else
+                    {
+                        var nuevoReporte = new Reporte
+                        {
+                            IdComercio = comercio.IdComercio,
+                            CantidadDeCajas = cantidadDeCajas,
+                            MontoTotalRecaudado = montoRecaudado,
+                            CantidadDeSINPES = cantidadDeSINPES,
+                            MontoTotalComision = montoComision,
+                            FechaDelReporte = fechaActual
+                        };
 
-                    db.Reportes.Add(nuevoReporte);
+                        db.Reportes.Add(nuevoReporte);
+                    }
                 }
+                Helpers.BitacoraHelper.RegistrarEvento(db, "Reportes", "Actualizar", "");
+            }
+            catch (Exception ex)
+            {
+                Helpers.BitacoraHelper.RegistrarError(db, "Reportes", ex);
+                ModelState.AddModelError("", "Ocurrió un error al actualizar reporte.");
             }
 
             db.SaveChanges();
             return RedirectToAction("Index");
-        }
 
+        }
 
         protected override void Dispose(bool disposing)
         {

@@ -42,7 +42,7 @@ namespace BancoLosPatitos.Models
         public DateTime? FechaDeModificacion { get; set; }
 
         [Required]
-        public bool Estado { get; set; }
+        public byte Estado { get; set; }
 
     }
 }

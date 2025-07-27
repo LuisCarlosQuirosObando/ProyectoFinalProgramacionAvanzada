@@ -74,6 +74,8 @@ namespace BancoLosPatitos.Controllers
                 configuracionComercio.Estado = 1;
                 db.ConfiguracionComercios.Add(configuracionComercio);
                 db.SaveChanges();
+
+                Helpers.BitacoraHelper.RegistrarEvento(db, "ConfiguracionComercios", "Registrar", configuracionComercio);
                 return RedirectToAction("Index");
             }
 

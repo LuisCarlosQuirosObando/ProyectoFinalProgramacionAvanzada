@@ -130,9 +130,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\BitacoraHelper.cs" />
-    <Compile Include="Migrations\202507262044362_Usuarios.cs" />
-    <Compile Include="Migrations\202507262044362_Usuarios.Designer.cs">
-      <DependentUpon>202507262044362_Usuarios.cs</DependentUpon>
+    <Compile Include="Migrations\202507271719204_Inicial.cs" />
+    <Compile Include="Migrations\202507271719204_Inicial.Designer.cs">
+      <DependentUpon>202507271719204_Inicial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202507271832280_CorreccionUsuario.cs" />
+    <Compile Include="Migrations\202507271832280_CorreccionUsuario.Designer.cs">
+      <DependentUpon>202507271832280_CorreccionUsuario.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Bitacora.cs" />
@@ -260,8 +264,11 @@
     <Content Include="Scripts\jquery-3.7.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202507262044362_Usuarios.resx">
-      <DependentUpon>202507262044362_Usuarios.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202507271719204_Inicial.resx">
+      <DependentUpon>202507271719204_Inicial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202507271832280_CorreccionUsuario.resx">
+      <DependentUpon>202507271832280_CorreccionUsuario.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
