@@ -98,9 +98,8 @@
             <td>
                 @Html.ActionLink("Editar", "Edit", new { id = item.IdComercio }) |
                 @Html.ActionLink("Detalles", "Details", new { id = item.IdComercio }) |
-                @Html.ActionLink("Ver cajas", "Index", "Cajas", new { idComercio = item.IdComercio }, null)
-
-
+                @Html.ActionLink("Ver cajas", "Index", "Cajas", new { idComercio = item.IdComercio }, null) |
+                @Html.ActionLink("Ver Usuarios", "Index", "Usuarios", new { idComercio = item.IdComercio }, null)
 
             </td>
         </tr>

@@ -23,5 +23,7 @@ namespace BancoLosPatitos.Models
 
         public DbSet<Reporte> Reportes { get; set; }
 
+        public DbSet<Usuarios> Usuarios { get; set; }
+
     }
 }

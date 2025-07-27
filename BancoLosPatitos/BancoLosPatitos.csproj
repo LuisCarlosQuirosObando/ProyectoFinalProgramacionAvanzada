@@ -125,13 +125,14 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ReportesController.cs" />
     <Compile Include="Controllers\SinpesController.cs" />
+    <Compile Include="Controllers\UsuariosController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\BitacoraHelper.cs" />
-    <Compile Include="Migrations\202507210351297_Inicial.cs" />
-    <Compile Include="Migrations\202507210351297_Inicial.Designer.cs">
-      <DependentUpon>202507210351297_Inicial.cs</DependentUpon>
+    <Compile Include="Migrations\202507262044362_Usuarios.cs" />
+    <Compile Include="Migrations\202507262044362_Usuarios.Designer.cs">
+      <DependentUpon>202507262044362_Usuarios.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Bitacora.cs" />
@@ -141,6 +142,7 @@
     <Compile Include="Models\PatitosContext.cs" />
     <Compile Include="Models\Reporte.cs" />
     <Compile Include="Models\Sinpe.cs" />
+    <Compile Include="Models\Usuarios.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -221,6 +223,11 @@
     <Content Include="Views\ConfiguracionComercios\Edit.cshtml" />
     <Content Include="Views\ConfiguracionComercios\Index.cshtml" />
     <Content Include="Views\Reportes\Index.cshtml" />
+    <Content Include="Views\Usuarios\Create.cshtml" />
+    <Content Include="Views\Usuarios\Delete.cshtml" />
+    <Content Include="Views\Usuarios\Details.cshtml" />
+    <Content Include="Views\Usuarios\Edit.cshtml" />
+    <Content Include="Views\Usuarios\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -253,8 +260,8 @@
     <Content Include="Scripts\jquery-3.7.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202507210351297_Inicial.resx">
-      <DependentUpon>202507210351297_Inicial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202507262044362_Usuarios.resx">
+      <DependentUpon>202507262044362_Usuarios.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Inicial : DbMigration
+    public partial class Usuarios : DbMigration
     {
         public override void Up()
         {
@@ -58,6 +58,38 @@
                 .PrimaryKey(t => t.IdComercio);
             
             CreateTable(
+                "dbo.ConfiguracionComercios",
+                c => new
+                    {
+                        IdConfiguracion = c.Int(nullable: false, identity: true),
+                        IdComercio = c.Int(nullable: false),
+                        TipoConfiguracion = c.Int(nullable: false),
+                        Comision = c.Int(nullable: false),
+                        FechaDeRegistro = c.DateTime(nullable: false),
+                        FechaDeModificacion = c.DateTime(nullable: false),
+                        Estado = c.Byte(nullable: false),
+                    })
+                .PrimaryKey(t => t.IdConfiguracion)
+                .ForeignKey("dbo.Comercios", t => t.IdComercio, cascadeDelete: true)
+                .Index(t => t.IdComercio);
+            
+            CreateTable(
+                "dbo.Reportes",
+                c => new
+                    {
+                        IdReporte = c.Int(nullable: false, identity: true),
+                        IdComercio = c.Int(nullable: false),
+                        CantidadDeCajas = c.Int(nullable: false),
+                        MontoTotalRecaudado = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        CantidadDeSINPES = c.Int(nullable: false),
+                        MontoTotalComision = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        FechaDelReporte = c.DateTime(nullable: false),
+                    })
+                .PrimaryKey(t => t.IdReporte)
+                .ForeignKey("dbo.Comercios", t => t.IdComercio, cascadeDelete: true)
+                .Index(t => t.IdComercio);
+            
+            CreateTable(
                 "dbo.Sinpes",
                 c => new
                     {
@@ -73,13 +105,42 @@
                     })
                 .PrimaryKey(t => t.IdSinpe);
             
+            CreateTable(
+                "dbo.Usuarios",
+                c => new
+                    {
+                        IdUsuario = c.Int(nullable: false, identity: true),
+                        IdComercio = c.Int(nullable: false),
+                        IdNetUser = c.Guid(),
+                        Nombres = c.String(nullable: false, maxLength: 100),
+                        PrimerApellido = c.String(nullable: false, maxLength: 100),
+                        SegundoApellido = c.String(nullable: false, maxLength: 100),
+                        Identificacion = c.String(nullable: false, maxLength: 10),
+                        CorreoElectronico = c.String(nullable: false, maxLength: 200),
+                        FechaDeRegistro = c.DateTime(nullable: false),
+                        FechaDeModificacion = c.DateTime(),
+                        Estado = c.Boolean(nullable: false),
+                    })
+                .PrimaryKey(t => t.IdUsuario)
+                .ForeignKey("dbo.Comercios", t => t.IdComercio, cascadeDelete: true)
+                .Index(t => t.IdComercio);
+            
         }
         
         public override void Down()
         {
+            DropForeignKey("dbo.Usuarios", "IdComercio", "dbo.Comercios");
+            DropForeignKey("dbo.Reportes", "IdComercio", "dbo.Comercios");
+            DropForeignKey("dbo.ConfiguracionComercios", "IdComercio", "dbo.Comercios");
             DropForeignKey("dbo.Cajas", "IdComercio", "dbo.Comercios");
+            DropIndex("dbo.Usuarios", new[] { "IdComercio" });
+            DropIndex("dbo.Reportes", new[] { "IdComercio" });
+            DropIndex("dbo.ConfiguracionComercios", new[] { "IdComercio" });
             DropIndex("dbo.Cajas", new[] { "IdComercio" });
+            DropTable("dbo.Usuarios");
             DropTable("dbo.Sinpes");
+            DropTable("dbo.Reportes");
+            DropTable("dbo.ConfiguracionComercios");
             DropTable("dbo.Comercios");
             DropTable("dbo.Cajas");
             DropTable("dbo.Bitacoras");
