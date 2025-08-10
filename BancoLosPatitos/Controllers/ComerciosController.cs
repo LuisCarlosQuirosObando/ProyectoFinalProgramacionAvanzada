@@ -1,21 +1,23 @@
-﻿using BancoLosPatitos.Models;
+﻿using BancoLosPatitos.Filtros;
+using BancoLosPatitos.Models;
 using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 
 namespace BancoLosPatitos.Controllers
 {
+    [LoggingExceptionFilter]
     public class ComerciosController : Controller
     {
         private PatitosContext db = new PatitosContext();
 
         // GET: Comercios
         public ActionResult Index()
-        {
+        { 
             return View(db.Comercios.ToList());
-
         }
 
         // GET: Comercios/Details/5
@@ -70,7 +72,7 @@ namespace BancoLosPatitos.Controllers
                 db.SaveChanges();
 
                 Helpers.BitacoraHelper.RegistrarEvento(db, "Comercios", "Registrar", comercio);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index");                  
                 }
 
                 catch (Exception ex)
@@ -79,7 +81,6 @@ namespace BancoLosPatitos.Controllers
                 ModelState.AddModelError("", "Ocurrió un error al crear comercio.");
             }
         }
-
             return View(comercio);
         }
 

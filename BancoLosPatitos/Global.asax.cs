@@ -17,5 +17,21 @@ namespace BancoLosPatitos
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+        protected void Application_Error()
+        {
+            Exception ex = Server.GetLastError();
+
+            var httpEx = ex as HttpException;
+            Response.Clear();
+
+            var routeData = new RouteData();
+            routeData.Values["controller"] = "Error";
+            routeData.Values["action"] = httpEx != null && httpEx.GetHttpCode() == 404 ? "NotFound" : "Index";
+
+            Server.ClearError();
+            Response.TrySkipIisCustomErrors = true;
+            IController errControler = new BancoLosPatitos.Controllers.ErrorController();
+            errControler.Execute(new RequestContext(new HttpContextWrapper(Context), routeData));
+        }
     }
 }

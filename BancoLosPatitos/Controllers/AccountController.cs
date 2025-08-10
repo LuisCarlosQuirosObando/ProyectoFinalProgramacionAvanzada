@@ -1,4 +1,5 @@
 ﻿using BancoLosPatitos.App_Start;
+using BancoLosPatitos.Filtros;
 using BancoLosPatitos.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -12,6 +13,7 @@ using System.Web.Mvc;
 
 namespace BancoLosPatitos.Controllers
 {
+    [LoggingExceptionFilter]
     public class AccountController : Controller
     {
         // GET: Account
