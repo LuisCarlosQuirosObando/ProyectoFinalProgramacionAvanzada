@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Inicio";
+}
+
+<main class="container mt-4">
+    <div class="jumbotron bg-light p-5 rounded shadow-sm">
+        <h1 class="display-4"><i class="bi bi-bank2 text-primary"></i> Bienvenido al modulo del API SINPE</h1>
+        <p class="lead">
+            Esta plataforma le permite gestionar de forma eficiente los SINPE de su empresa mediante un API.
+        </p>
+        <hr class="my-4" />
+        
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-4 mt-3 mt-md-0">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-people text-info"></i> Soporte y Ayuda</h5>
+                    <p class="card-text">¿Tenés preguntas o necesitás soporte?</p>
+                    <a href="@Url.Action("Contact", "Home")" class="btn btn-outline-info">Contáctenos</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

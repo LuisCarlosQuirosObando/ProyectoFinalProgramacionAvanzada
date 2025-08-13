@@ -1,13 +1,15 @@
-﻿using BancoLosPatitos.Filtros;
+﻿using BancoLosPatitos.API.Models;
+using BancoLosPatitos.Filtros;
 using BancoLosPatitos.Models;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Net.Http.Json;
 
 namespace BancoLosPatitos.Controllers
 {
@@ -158,7 +160,7 @@ namespace BancoLosPatitos.Controllers
             var sinpe = db.Sinpes.Find(id);
             if (sinpe != null && sinpe.Estado == 0)
             {
-                sinpe.Estado = 1; // Cambiar a sincronizado
+                sinpe.Estado = 1;
                 db.SaveChanges();
                 TempData["mensaje"] = "SINPE sincronizado correctamente.";
                 return RedirectToAction("VerSinpes", "Cajas", new { telefono = sinpe.TelefonoDestinatario });
@@ -170,6 +172,38 @@ namespace BancoLosPatitos.Controllers
 
             }
         }
+
+        public ActionResult Consultar()
+        {
+            return View();
+        }
+
+
+        private readonly string apiBaseUrl = "https://localhost:44361/api/sinpe";
+
+        // GET: Vista para consultar SINPE por teléfono
+        [HttpPost]
+        public async Task<ActionResult> Consultar(string telefono)
+        {
+            List<SinpeAPI> resultado = new List<SinpeAPI>();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(apiBaseUrl);
+                var response = await client.GetAsync($"obtener/{telefono}");
+                if (response.IsSuccessStatusCode)
+                {
+                    resultado = await response.Content.ReadFromJsonAsync<List<SinpeAPI>>();
+                }
+                else
+                {
+                    ViewBag.Error = "No se pudo obtener la información.";
+                }
+            }
+
+            return View(resultado);
+        }
+
 
 
 

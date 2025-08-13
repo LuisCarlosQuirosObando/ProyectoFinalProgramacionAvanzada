@@ -1,0 +1,55 @@
+﻿@model List<BancoLosPatitos.API.Models.SinpeAPI>
+
+@{
+    ViewBag.Title = "Consultar SINPE por Teléfono";
+}
+
+<h2>Consultar SINPE por Teléfono</h2>
+
+<form method="post">
+    <div>
+        <label>Teléfono destinatario:</label>
+        <input type="text" name="telefono" required />
+        <button type="submit">Consultar</button>
+    </div>
+</form>
+
+@if (ViewBag.Error != null)
+{
+    <p style="color:red">@ViewBag.Error</p>
+}
+
+@if (Model != null && Model.Count > 0)
+{
+    <table border="1" cellpadding="5">
+        <thead>
+            <tr>
+                <th>IdSinpe</th>
+                <th>Tel. Origen</th>
+                <th>Nombre Origen</th>
+                <th>Tel. Destinatario</th>
+                <th>Nombre Destinatario</th>
+                <th>Monto</th>
+                <th>Descripción</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var sinpe in Model)
+        {
+            <tr>
+                <td>@sinpe.IdSinpe</td>
+                <td>@sinpe.TelefonoOrigen</td>
+                <td>@sinpe.NombreOrigen</td>
+                <td>@sinpe.TelefonoDestinatario</td>
+                <td>@sinpe.NombreDestinatario</td>
+                <td>@sinpe.Monto.ToString("N2")</td>
+                <td>@sinpe.Descripcion</td>
+                <td>@sinpe.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@(sinpe.Estado ? "Sincronizado" : "No sincronizado")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
