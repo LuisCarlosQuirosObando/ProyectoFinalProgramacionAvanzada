@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Registrar SINPE";
+}
+
+<h2>Registrar SINPE</h2>
+
+<form method="post">
+    <input type="text" name="TelefonoOrigen" placeholder="Teléfono Origen" required /><br>
+    <input type="text" name="NombreOrigen" placeholder="Nombre Origen" required /><br>
+    <input type="text" name="TelefonoDestinatario" placeholder="Teléfono Destinatario" required /><br>
+    <input type="text" name="NombreDestinatario" placeholder="Nombre Destinatario" required /><br>
+    <input type="number" step="0.01" name="Monto" placeholder="Monto" required /><br>
+    <input type="text" name="Descripcion" placeholder="Descripción" required /><br>
+    <input type="datetime-local" name="Fecha" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" required /><br>
+    <input type="hidden" name="Estado" value="false" />
+
+    <button type="submit">Registrar</button>
+</form>
+
+@if (ViewBag.Mensaje != null)
+{
+    <p style="color:green">@ViewBag.Mensaje</p>
+}
+
+@if (ViewBag.Error != null)
+{
+    <p style="color:red">@ViewBag.Error</p>
+}
+
+<div>
+    @Html.ActionLink("Regresar", "Index", "Sinpes")
+</div>

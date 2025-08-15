@@ -212,6 +212,7 @@
     <Compile Include="Models\RegisterViewModel.cs" />
     <Compile Include="Models\Reporte.cs" />
     <Compile Include="Models\Sinpe.cs" />
+    <Compile Include="Models\SinpeSyncResponse.cs" />
     <Compile Include="Models\Usuarios.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -326,6 +327,8 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\NotFound.cshtml" />
     <Content Include="Views\Sinpes\Consultar.cshtml" />
+    <Content Include="Views\Sinpes\Sincronizar.cshtml" />
+    <Content Include="Views\Sinpes\Recibir.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

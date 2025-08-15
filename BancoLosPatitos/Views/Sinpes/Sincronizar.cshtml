@@ -1,0 +1,27 @@
+﻿@model BancoLosPatitos.Models.SinpeSyncResponse
+
+@{
+    ViewBag.Title = "Sincronizar SINPE";
+}
+
+<h2>Sincronizar SINPE</h2>
+
+<form method="post">
+    <div>
+        <label>Id SINPE:</label>
+        <input type="number" name="idSinpe" required />
+        <button type="submit">Sincronizar</button>
+    </div>
+</form>
+
+@if (Model != null)
+{
+    <div style="margin-top:20px;">
+        <p><strong>Resultado:</strong> @(Model.EsValido ? "Sincronizado correctamente" : "Error al sincronizar")</p>
+        <p><strong>Mensaje:</strong> @Model.Mensaje</p>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Regresar", "Index", "Sinpes")
+</div>

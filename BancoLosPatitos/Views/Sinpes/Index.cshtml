@@ -27,21 +27,13 @@
                 <button type="submit" class="btn btn-success">Buscar</button>
             </div>
         }
+        
     </div>
 
     <div class="col-md-6 text-end">
-        @Html.ActionLink("Crear Nuevo", "Create", "Sinpes", null, new { @class = "btn btn-outline-success" })
+        @Html.ActionLink("Crear Nuevo", "Create", "Sinpes", null, new { @class = "btn btn-outline-success" })    
     </div>
-
 </div>
-
-
-
-
-
-
-
-
 
 <table class="table">
     <tr>
@@ -119,6 +111,15 @@
 
 
 </table>
+<div>
+    @Html.ActionLink("Consultar SINPE API", "Consultar", "Sinpes")
+</div>
+<div>
+    @Html.ActionLink("Sincronizar SINPE API", "Sincronizar", "Sinpes")
+</div>
+<div>
+    @Html.ActionLink("Recibir SINPE API", "Recibir", "Sinpes")
+</div>
 <div>
     @Html.ActionLink("Regresar", "Index", "Comercios")
 </div>

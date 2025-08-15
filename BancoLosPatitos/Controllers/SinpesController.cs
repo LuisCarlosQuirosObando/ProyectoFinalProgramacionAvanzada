@@ -178,10 +178,9 @@ namespace BancoLosPatitos.Controllers
             return View();
         }
 
+        private readonly string apiBaseUrl = "https://localhost:44361/api/sinpe/";
 
-        private readonly string apiBaseUrl = "https://localhost:44361/api/sinpe";
-
-        // GET: Vista para consultar SINPE por teléfono
+        // GET: Consultar SINPE por teléfono
         [HttpPost]
         public async Task<ActionResult> Consultar(string telefono)
         {
@@ -205,7 +204,83 @@ namespace BancoLosPatitos.Controllers
         }
 
 
+        public ActionResult Sincronizar()
+        {
+            return View();
+        }
 
+        // POST: Sincronizar SINPE
+        [HttpPost]
+        public async Task<ActionResult> Sincronizar(int idSinpe)
+        {
+            SinpeSyncResponse resultado = new SinpeSyncResponse();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(apiBaseUrl);
+                var response = await client.PutAsync($"sincronizar/{idSinpe}", null);
+                if (response.IsSuccessStatusCode)
+                {
+                    resultado = await response.Content.ReadFromJsonAsync<SinpeSyncResponse>();
+                }
+                else
+                {
+                    resultado.EsValido = false;
+                    resultado.Mensaje = "No se pudo sincronizar el SINPE.";
+                }
+            }
+
+            return View(resultado);
+        }
+
+
+
+        public ActionResult Recibir()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Recibir(
+            string TelefonoOrigen,
+            string NombreOrigen,
+            string TelefonoDestinatario,
+            string NombreDestinatario,
+            decimal Monto,
+            string Descripcion,
+            DateTime Fecha,
+            bool Estado)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(apiBaseUrl);
+
+                var nuevoSinpe = new
+                {
+                    TelefonoOrigen,
+                    NombreOrigen,
+                    TelefonoDestinatario,
+                    NombreDestinatario,
+                    Monto,
+                    Descripcion,
+                    Fecha,
+                    Estado
+                };
+
+                var response = await client.PostAsJsonAsync("recibir", nuevoSinpe);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    ViewBag.Mensaje = "SINPE registrado correctamente.";
+                }
+                else
+                {
+                    ViewBag.Error = "Error al registrar SINPE.";
+                }
+            }
+
+            return View();
+        }
 
 
     }
