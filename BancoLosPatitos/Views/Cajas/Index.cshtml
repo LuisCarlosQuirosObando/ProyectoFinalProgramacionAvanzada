@@ -8,8 +8,9 @@
 
 <p>
     @Html.ActionLink("Registrar Caja", "Create", null, new { @class = "btn btn-primary" })
-    
+
 </p>
+
 <table class="table">
     <tr>
         <th>
@@ -32,35 +33,45 @@
         </th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
+    @foreach (var item in Model)
+    {
+        <tr>
 
-        <td>
-            @Html.DisplayFor(modelItem => item.Nombre)
-        </td>
-        <td>
-            @(item.Descripcion?.Length > 10 ? item.Descripcion.Substring(0, 10) + "..." : item.Descripcion)
-        </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @(item.Descripcion?.Length > 10 ? item.Descripcion.Substring(0, 10) + "..." : item.Descripcion)
+            </td>
 
-        <td>
-            @Html.DisplayFor(modelItem => item.TelefonoSINPE)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FechaDeRegistro)
-        </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TelefonoSINPE)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaDeRegistro)
+            </td>
 
-        <td>
-            @(item.Estado == 1 ? "Activo" : "Inactivo")
-        </td>
-        <td>
-            @Html.ActionLink("Editar", "Edit", new { id = item.IdCaja }) |
-            @Html.ActionLink("Ver SINPE", "VerSinpes", "Cajas", new { telefono = item.TelefonoSINPE }, null)
-        </td>
-    </tr>
-}
+            <td>
+                @(item.Estado == 1 ? "Activo" : "Inactivo")
+            </td>
+            <td>
+                @Html.ActionLink("Editar", "Edit", new { id = item.IdCaja }) |
+                @Html.ActionLink("Ver SINPE", "VerSinpes", "Cajas", new { telefono = item.TelefonoSINPE }, null)
+            </td>
+        </tr>
+    }
 
 </table>
 
-<div>
-    @Html.ActionLink("Regresar", "Index", "Comercios")
-</div>
+@Html.ActionLink("← Regresar", "Index", "Comercios", null,
+    new
+    {
+        @class = "btn",
+        style = "border:1px solid #666; color:#666; background:#fff; font-weight:600; border-radius:10px; padding:6px 14px;"
+    })
+
+
+
+
+
+

@@ -7,7 +7,7 @@
 <h2>Configuracion de Comercios</h2>
 
 <p>
-    @Html.ActionLink("Configurar Comercio", "Create")
+    @Html.ActionLink("Configurar Comercio", "Create",null, new { @class = "btn btn-primary" })
 </p>
 <table class="table">
     <tr>
@@ -34,48 +34,52 @@
         </th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Comercio.Nombre)
-        </td>
-        <td>
-            @{
-                string TipoConfiguracionTexto = "";
-                switch (item.TipoConfiguracion)
-                {
-                    case 1:
-                        TipoConfiguracionTexto = "Plataforma";
-                        break;
-                    case 2:
-                        TipoConfiguracionTexto = "Externa";
-                        break;
-                    default:
-                        TipoConfiguracionTexto = "Ambas";
-                        break;
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comercio.Nombre)
+            </td>
+            <td>
+                @{
+                    string TipoConfiguracionTexto = "";
+                    switch (item.TipoConfiguracion)
+                    {
+                        case 1:
+                            TipoConfiguracionTexto = "Plataforma";
+                            break;
+                        case 2:
+                            TipoConfiguracionTexto = "Externa";
+                            break;
+                        default:
+                            TipoConfiguracionTexto = "Ambas";
+                            break;
+                    }
                 }
-            }
-            @TipoConfiguracionTexto
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Comision)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FechaDeRegistro)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FechaDeModificacion)
-        </td>
-        <td>
-            @(item.Estado == 1 ? "Activo" : "Inactivo")
-        </td>
-        <td>
-            @Html.ActionLink("Editar", "Edit", new { id=item.IdConfiguracion }) 
-        </td>
-    </tr>
-}
+                @TipoConfiguracionTexto
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comision)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaDeRegistro)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaDeModificacion)
+            </td>
+            <td>
+                @(item.Estado == 1 ? "Activo" : "Inactivo")
+            </td>
+            <td>
+                @Html.ActionLink("Editar", "Edit", new { id = item.IdConfiguracion })
+            </td>
+        </tr>
+    }
 
 </table>
-<div>
-    @Html.ActionLink("Regresar a comercios", "Index", "Comercios")
-</div>
+@Html.ActionLink("← Regresar", "Index", "Comercios", null,
+    new
+    {
+        @class = "btn",
+        style = "border:1px solid #666; color:#666; background:#fff; font-weight:600; border-radius:10px; padding:6px 14px;"
+    })

@@ -27,9 +27,12 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Regresar", "Index")
-</div>
+@Html.ActionLink("← Regresar", "Index", "Comercios", null,
+    new
+    {
+        @class = "btn",
+        style = "border:1px solid #666; color:#666; background:#fff; font-weight:600; border-radius:10px; padding:6px 14px;"
+    })
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

@@ -10,7 +10,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
 <div class="form-horizontal">
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -18,7 +18,7 @@
     @Html.HiddenFor(model => model.IdComercio)
 
     <div class="form-group">
-       Tipo De Configuracion
+        Tipo De Configuracion
         <div class="col-md-10">
             @Html.DropDownListFor(model => model.TipoConfiguracion, (SelectList)ViewBag.TipoConfiguraciones, "Seleccione el tipo de configuracion", new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.TipoConfiguracion, "", new { @class = "text-danger" })
@@ -46,15 +46,24 @@
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Guardar" class="btn btn-default" />
+            <div style="display:flex; align-items:center; gap:12px;">
+                <input type="submit" value="Crear" class="btn btn-outline-success" />
+
+                @Html.ActionLink("← Regresar", "Index", "Comercios", null,
+                  new
+                       {
+                    @class = "btn",
+                    // empuja el link a la derecha y mantiene el estilo
+                    style = "margin-left:auto; border:1px solid #666; color:#666; background:#fff;" +
+                             "font-weight:600; border-radius:10px; padding:6px 14px;"
+                  })
+            </div>
         </div>
     </div>
 </div>
 }
 
-<div>
-    @Html.ActionLink("Regresar", "Index")
-</div>
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

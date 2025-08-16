@@ -12,6 +12,7 @@ using System.Web.Mvc;
 namespace BancoLosPatitos.Controllers
 {
     [LoggingExceptionFilter]
+    [Authorize(Roles = "Administrador")]
     public class ReportesController : Controller
     {
         private PatitosContext db = new PatitosContext();

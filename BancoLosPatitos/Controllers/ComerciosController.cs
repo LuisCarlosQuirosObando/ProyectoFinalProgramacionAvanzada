@@ -10,6 +10,7 @@ using System.Web.UI.WebControls;
 namespace BancoLosPatitos.Controllers
 {
     [LoggingExceptionFilter]
+    [Authorize(Roles = "Administrador")]
     public class ComerciosController : Controller
     {
         private PatitosContext db = new PatitosContext();

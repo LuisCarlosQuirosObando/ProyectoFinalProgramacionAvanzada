@@ -1,99 +1,76 @@
 ﻿@model IEnumerable<BancoLosPatitos.Models.Sinpe>
-
 @{
     ViewBag.Title = "SINPE";
 }
 
+
+
 <h2>SINPES</h2>
-<p>
-    
-    <div class="col-md-6 text-start">
-        @if (Request.QueryString["telefono"] != null)
-        {
-            <h5 class="text-primary mb-0" dir="rtl">
-                SINPE recibidos en caja: @Request.QueryString["telefono"]
-            </h5>
-        }
-    </div>
-</p>
+
+@if (TempData["mensaje"] != null)
+{
+    <div class="alert alert-success">@TempData["mensaje"]</div>
+}
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+@if (ViewBag.Info != null)
+{
+    <div class="alert alert-info">@ViewBag.Info</div>
+}
+
+@if (ViewBag.Telefono != null)
+{
+    <h5 class="text-primary mb-3">SINPE recibidos en caja: @ViewBag.Telefono</h5>
+}
 
 <div class="row align-items-center mb-3">
     <div class="col-md-6">
-        @using (Html.BeginForm("VerSinpes", "Cajas", FormMethod.Get))
+        @using (Html.BeginForm("Index", "Sinpes", FormMethod.Get))
         {
             <div class="form-inline">
-                <label for="telefono" class="mr-2">Buscar SINPE:</label>
+                <label for="telefono" class="mr-2">Buscar SINPE (teléfono de caja):</label>
                 <input type="number" id="telefono" name="telefono" class="form-control mr-2" placeholder="Teléfono" required />
                 <button type="submit" class="btn btn-success">Buscar</button>
             </div>
         }
-        
     </div>
 
     <div class="col-md-6 text-end">
-        @Html.ActionLink("Crear Nuevo", "Create", "Sinpes", null, new { @class = "btn btn-outline-success" })    
+        @if (User.IsInRole("Administrador"))
+        {
+            @Html.ActionLink("Crear Nuevo", "Create", "Sinpes", null, new { @class = "btn btn-outline-success" })
+        }
     </div>
 </div>
 
 <table class="table">
     <tr>
-        <th>
-            Telefono de origen
-        </th>
-        <th>
-            Nombre de origen
-        </th>
-        <th>
-            Telefono del destinatario
-        </th>
-        <th>
-            Nombre del destinatario
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Monto)
-        </th>
-        <th>
-            Fecha
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Descripcion)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Estado)
-        </th>
+        <th>Telefono de origen</th>
+        <th>Nombre de origen</th>
+        <th>Telefono del destinatario</th>
+        <th>Nombre del destinatario</th>
+        <th>@Html.DisplayNameFor(m => m.First().Monto)</th>
+        <th>Fecha</th>
+        <th>@Html.DisplayNameFor(m => m.First().Descripcion)</th>
+        <th>@Html.DisplayNameFor(m => m.First().Estado)</th>
         <th></th>
     </tr>
 
     @foreach (var item in Model)
     {
         <tr>
+            <td>@item.TelefonoOrigen</td>
+            <td>@item.NombreOrigen</td>
+            <td>@item.TelefonoDestinatario</td>
+            <td>@item.NombreDestinatario</td>
+            <td>@item.Monto</td>
+            <td>@item.FechaDeRegistro</td>
+            <td>@item.Descripcion</td>
+            <td>@(item.Estado == 1 ? "Sincronizado" : "No sincronizado")</td>
             <td>
-                @Html.DisplayFor(modelItem => item.TelefonoOrigen)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NombreOrigen)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TelefonoDestinatario)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NombreDestinatario)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Monto)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaDeRegistro)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
-            </td>
-            <td>
-                @(item.Estado == 1 ? "Sincronizado" : "No sincronizado")
-            </td>
-
-            <td>
-                @if (item.Estado == 0)
+                @if (item.Estado == 0 && (User.IsInRole("Administrador") || User.IsInRole("Cajero")))
                 {
                     using (Html.BeginForm("SincronizarSinpe", "Sinpes", FormMethod.Post, new { style = "display:inline;" }))
                     {
@@ -108,18 +85,23 @@
             </td>
         </tr>
     }
-
-
 </table>
-<div>
-    @Html.ActionLink("Consultar SINPE API", "Consultar", "Sinpes")
-</div>
-<div>
-    @Html.ActionLink("Sincronizar SINPE API", "Sincronizar", "Sinpes")
-</div>
-<div>
-    @Html.ActionLink("Recibir SINPE API", "Recibir", "Sinpes")
-</div>
-<div>
-    @Html.ActionLink("Regresar", "Index", "Comercios")
-</div>
+
+
+
+
+
+
+
+
+
+<div>@Html.ActionLink("Consultar SINPE API", "Consultar", "Sinpes")</div>
+<div>@Html.ActionLink("Sincronizar SINPE API", "Sincronizar", "Sinpes")</div>
+<div>@Html.ActionLink("Recibir SINPE API", "Recibir", "Sinpes")</div>
+@Html.ActionLink("← Regresar", "Index", "Comercios", null,
+    new
+    {
+        @class = "btn",
+        style = "border:1px solid #666; color:#666; background:#fff; font-weight:600; border-radius:10px; padding:6px 14px;"
+    })
+

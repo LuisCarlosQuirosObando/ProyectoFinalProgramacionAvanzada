@@ -1,26 +1,72 @@
 ﻿@model BancoLosPatitos.Models.RegisterViewModel
 @{
     ViewBag.Title = "Registrar nuevo usuario";
+    var rol = Model?.Rol;
+    var esCajero = string.Equals(rol, "Cajero", System.StringComparison.OrdinalIgnoreCase);
+    var correos = ViewBag.DBCorreoCajero as IEnumerable<string> ?? new List<string>();
 }
 
 <h2>@ViewBag.Title</h2>
 
+<!-- Sección: Seleccione un Rol (con recuadro) -->
+<div class="form-group">
+    <label class="control-label col-md-2"></label>
+    <div class="col-md-10">
+        <div style="display:inline-block; border:1px solid #2e7d32; border-radius:6px; padding:8px 12px; white-space:nowrap;">
+            <strong style="color:#2e7d32; margin-right:12px;">Haga click en un Rol :</strong>
+            <div class="btn-group">
+                <a class="btn @(rol=="Administrador" ? "btn-success" : "btn-default")"
+                   href="@Url.Action("Register","Account", new { rol = "Administrador" })">Administrador</a>
+                <a class="btn @(rol=="Cajero" ? "btn-success" : "btn-default")"
+                   href="@Url.Action("Register","Account", new { rol = "Cajero" })">Cajero</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal" }))
 {
     @Html.AntiForgeryToken()
-    <div class="form-group">
-        @Html.LabelFor(m => m.Email, new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Email)
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    @Html.HiddenFor(m => m.Rol, new { @Value = rol })
+
+    <!-- Email: textbox para Administrador, combo para Cajero -->
+    if (esCajero)
+    {
+        <div class="form-group">
+            <label class="control-label col-md-2">Correo del cajero (registrado)</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(m => m.Email,
+                    new SelectList(correos),
+                    "Seleccione un correo...",
+                    new { @class = "form-control" })
+                <small class="help-block">
+                    Correo existente en la tabla <strong>Usuarios</strong> (pendiente de sincronizar).
+                </small>
+                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
+    }
+    else
+    {
+        <div class="form-group">
+            @Html.LabelFor(m => m.Email, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    }
 
     <div class="form-group">
         @Html.LabelFor(m => m.Password, new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Password)
+            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
         </div>
     </div>
 
@@ -28,16 +74,13 @@
         @Html.LabelFor(m => m.ConfirmPassword, new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.ConfirmPassword)
+            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
         </div>
     </div>
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Registrar" class="btn btn-success" />
+            <input type="submit" value="Registrar" class="btn btn-success" @(string.IsNullOrEmpty(rol) ? "disabled=\"disabled\"" : "") />
         </div>
     </div>
-}
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
 }

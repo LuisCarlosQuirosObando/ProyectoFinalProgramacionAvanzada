@@ -10,6 +10,7 @@ namespace BancoLosPatitos
         {
             filters.Add(new HandleErrorAttribute());
             filters.Add(new LoggingExceptionFilterAttribute());
+            filters.Add(new AuthorizeAttribute());  // Asegurar que todas las acciones requieran autenticación
         }
     }
 }

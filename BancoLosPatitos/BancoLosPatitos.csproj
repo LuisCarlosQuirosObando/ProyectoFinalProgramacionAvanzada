@@ -200,6 +200,10 @@
     <Compile Include="Migrations\202508040008248_Inicial.Designer.cs">
       <DependentUpon>202508040008248_Inicial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202508151819123_Autorizaciones.cs" />
+    <Compile Include="Migrations\202508151819123_Autorizaciones.Designer.cs">
+      <DependentUpon>202508151819123_Autorizaciones.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
@@ -341,6 +345,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202508040008248_Inicial.resx">
       <DependentUpon>202508040008248_Inicial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202508151819123_Autorizaciones.resx">
+      <DependentUpon>202508151819123_Autorizaciones.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

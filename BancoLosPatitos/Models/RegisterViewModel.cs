@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
+
 namespace BancoLosPatitos.Models
 {
     public class RegisterViewModel
@@ -12,6 +13,9 @@ namespace BancoLosPatitos.Models
         [EmailAddress]
         [Display(Name = "Correo electrónico")]
         public string Email { get; set; }
+
+        [Required] 
+        public string Rol { get; set; } // "Administrador" o "Cajero"
 
         [Required]
         [StringLength(100, ErrorMessage = "El número de caracteres de {0} debe ser al menos {2}.", MinimumLength = 6)]
