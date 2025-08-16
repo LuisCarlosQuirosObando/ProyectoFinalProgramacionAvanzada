@@ -90,14 +90,41 @@
 
 
 
+<!-- Caja de acciones SINPE (estilo tipo “roles”) -->
+<div style="border:1px solid #2e7d32; border-radius:10px; padding:12px; margin-top:12px;">
+    <div style="font-weight:700; color:#2e7d32; margin-bottom:10px;">
+        Acciones SINPE por medio de la API
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        @Html.ActionLink("Consultar SINPE API", "Consultar", "Sinpes", null,
+            new
+                 {
+                     @class = "btn",
+                  style = "border:1px solid #2e7d32; color:#2e7d32; background:#fff; font-weight:600; border-radius:10px; padding:6px 14px;"
+                 })
+
+        @Html.ActionLink("Sincronizar SINPE API", "Sincronizar", "Sinpes", null,
+            new
+                 {
+                     @class = "btn",
+                  style = "border:1px solid #2e7d32; color:#2e7d32; background:#fff; font-weight:600; border-radius:10px; padding:6px 14px;"
+                 })
+
+        @Html.ActionLink("Recibir SINPE API", "Recibir", "Sinpes", null,
+            new
+                 {
+                     @class = "btn",
+                  style = "border:1px solid #2e7d32; color:#2e7d32; background:#fff; font-weight:600; border-radius:10px; padding:6px 14px;"
+                 })
+    </div>
+</div>
 
 
 
 
 
-<div>@Html.ActionLink("Consultar SINPE API", "Consultar", "Sinpes")</div>
-<div>@Html.ActionLink("Sincronizar SINPE API", "Sincronizar", "Sinpes")</div>
-<div>@Html.ActionLink("Recibir SINPE API", "Recibir", "Sinpes")</div>
+
 @Html.ActionLink("← Regresar", "Index", "Comercios", null,
     new
     {
