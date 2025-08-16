@@ -56,41 +56,74 @@ namespace BancoLosPatitos.API.Controllers
             }
         }
 
+        public class SinpeSyncResponse
+        {
+            public bool EsValido { get; set; }
+            public string Mensaje { get; set; }
+            public int? Afectados { get; set; }
+        }
+
         [HttpPut]
         [Route("api/sinpe/sincronizar/{id}")]
         public IHttpActionResult SincronizarSinpe(int id)
         {
             try
             {
-                bool actualizado = false;
-                string connectionString = ConfigurationManager.ConnectionStrings["BancoLosPatitosDbConnection"].ConnectionString;
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                int rowsAffected = 0;
+                string cs = ConfigurationManager.ConnectionStrings["BancoLosPatitosDbConnection"].ConnectionString;
+
+                using (var cn = new SqlConnection(cs))
                 {
-                    connection.Open();
-                    string query = "UPDATE dbo.Sinpes SET Estado = 1 WHERE IdSinpe = @id";
-                    using (SqlCommand command = new SqlCommand(query, connection))
+                    cn.Open();
+                    // Solo sincroniza si está pendiente (Estado = 0)
+                    var sql = "UPDATE dbo.Sinpes SET Estado = 1 WHERE IdSinpe = @id AND Estado = 0";
+                    using (var cmd = new SqlCommand(sql, cn))
                     {
-                        command.Parameters.AddWithValue("@id", id);
-                        int rowsAffected = command.ExecuteNonQuery();
-                        actualizado = rowsAffected > 0;
-                    }
-                    if (actualizado)
-                    {
-                        return Ok(new
-                        {
-                            EsValido = true,
-                            Mensaje = "SINPE sincronizado correctamente."
-                        });
-                    }
-                    else
-                    {
-                        return Ok(new
-                        {
-                            EsValido = false,
-                            Mensaje = "No se encontró el SINPE con el Id especificado."
-                        });
+                        cmd.Parameters.AddWithValue("@id", id);
+                        rowsAffected = cmd.ExecuteNonQuery();
                     }
                 }
+
+                if (rowsAffected > 0)
+                    return Ok(new SinpeSyncResponse { EsValido = true, Afectados = rowsAffected, Mensaje = "SINPE sincronizado correctamente." });
+
+                // No afectó filas: o no existe o ya estaba sincronizado
+                return Ok(new SinpeSyncResponse { EsValido = false, Afectados = 0, Mensaje = "No se encontró SINPE pendiente con ese Id." });
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
+
+        [HttpPut]
+        [Route("api/sinpe/sincronizar/pendientes/{telefono}")]
+        public IHttpActionResult SincronizarPendientes(string telefono)
+        {
+            try
+            {
+                int rowsAffected = 0;
+                string cs = ConfigurationManager.ConnectionStrings["BancoLosPatitosDbConnection"].ConnectionString;
+
+                using (var cn = new SqlConnection(cs))
+                {
+                    cn.Open();
+                    var sql = @"
+                UPDATE dbo.Sinpes 
+                SET Estado = 1 
+                WHERE TelefonoDestinatario = @tel AND Estado = 0";
+                    using (var cmd = new SqlCommand(sql, cn))
+                    {
+                        cmd.Parameters.AddWithValue("@tel", telefono);
+                        rowsAffected = cmd.ExecuteNonQuery();
+                    }
+                }
+
+                if (rowsAffected > 0)
+                    return Ok(new SinpeSyncResponse { EsValido = true, Afectados = rowsAffected, Mensaje = $"Se sincronizaron {rowsAffected} SINPE(s)." });
+
+                return Ok(new SinpeSyncResponse { EsValido = false, Afectados = 0, Mensaje = "No hay SINPE pendientes para ese teléfono." });
             }
             catch (Exception ex)
             {

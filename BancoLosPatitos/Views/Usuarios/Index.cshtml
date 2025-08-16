@@ -102,8 +102,14 @@
                     : "Sin modificar")
             </td>
             <td>
-                @(item.Estado == 1 ? "Activo" : "Inactivo")
-            </td>
+                @if (item.Estado == 1)
+                {
+                    <span class="badge badge-success">Activo</span>
+                }
+                else
+                {
+                    <span class="badge badge-secondary">Inactivo</span>
+                }
             <td>
                 @Html.ActionLink("Editar", "Edit", new { id = item.IdUsuario })
             </td>

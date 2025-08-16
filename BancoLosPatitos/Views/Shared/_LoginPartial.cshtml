@@ -1,22 +1,37 @@
 ﻿@using Microsoft.AspNet.Identity
+
+@{
+    // Obtiene el usuario completo y una versión corta (antes del @)
+    var fullUser = User.Identity.IsAuthenticated ? (User.Identity.GetUserName() ?? "") : "";
+    var shortUser = fullUser;
+    var atIndex = fullUser.IndexOf('@');
+    if (atIndex > 0) { shortUser = fullUser.Substring(0, atIndex); }
+}
+
 @if (Request.IsAuthenticated)
 {
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "d-inline" }))
     {
         @Html.AntiForgeryToken()
 
-        <ul class="navbar-nav navbar-right">
-            <li>
-                @Html.ActionLink("Hola " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "nav-link" })
+        <ul class="navbar-nav ms-auto align-items-center">
+            <li class="nav-item text-white small me-3">
+                Hola <span class="navbar-username" title="@fullUser">@shortUser</span>!
             </li>
-            <li><a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">Cerrar sesión</a></li>
+            <li class="nav-item">
+                <a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">Cerrar sesión</a>
+            </li>
         </ul>
     }
 }
 else
 {
-    <ul class="navbar-nav navbar-right">
-        <li>@Html.ActionLink("Registrarse", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "nav-link" })</li>
-        <li>@Html.ActionLink("Iniciar sesión", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "nav-link" })</li>
+    <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+            @Html.ActionLink("Registrarse", "Register", "Account", null, new { @class = "nav-link", id = "registerLink" })
+        </li>
+        <li class="nav-item">
+            @Html.ActionLink("Iniciar sesión", "Login", "Account", null, new { @class = "nav-link", id = "loginLink" })
+        </li>
     </ul>
 }

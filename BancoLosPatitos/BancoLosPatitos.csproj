@@ -192,6 +192,7 @@
     <Compile Include="Controllers\SinpesController.cs" />
     <Compile Include="Controllers\UsuariosController.cs" />
     <Compile Include="Filtros\LoggingExceptionFilterAttribute.cs" />
+    <Compile Include="Filtros\RequireRegisteredUserAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

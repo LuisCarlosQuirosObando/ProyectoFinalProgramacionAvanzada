@@ -1,95 +1,88 @@
 ﻿@model BancoLosPatitos.Models.Usuarios
-
 @{
     ViewBag.Title = "Crear";
 }
 
-<h2>Crear Usuarios</h2>
+<h2 class="clearfix" style="margin-bottom:12px;">Crear Usuarios</h2>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    <div class="form-horizontal">
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-card">
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.IdComercio, "Id Comercio", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @* Asegúrate en el controlador: ViewBag.IdComercio = new SelectList(db.Comercios, "IdComercio", "Nombre"); *@
+        <div class="form-row">
+            <div class="form-term">Id Comercio</div>
+            <div class="form-value">
+                @* Asegúrate en el controlador: ViewBag.IdComercio = new SelectList(db.Comercios, "IdComercio", "Identificacion"); *@
                 @Html.DropDownListFor(m => m.IdComercio, ViewBag.IdComercio as SelectList, "-- Seleccione --", new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.IdComercio, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.IdNetUser, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(m => m.IdNetUser, new { htmlAttributes = new { @class = "form-control" } })
+        <div class="form-row">
+            <div class="form-term">IdNetUser</div>
+            <div class="form-value">
+                @Html.TextBoxFor(m => m.IdNetUser, new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.IdNetUser, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.Nombres, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(m => m.Nombres, new { htmlAttributes = new { @class = "form-control" } })
+        <div class="form-row">
+            <div class="form-term">Nombres</div>
+            <div class="form-value">
+                @Html.TextBoxFor(m => m.Nombres, new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.Nombres, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.PrimerApellido, "Primer Apellido", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(m => m.PrimerApellido, new { htmlAttributes = new { @class = "form-control" } })
+        <div class="form-row">
+            <div class="form-term">Primer Apellido</div>
+            <div class="form-value">
+                @Html.TextBoxFor(m => m.PrimerApellido, new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.PrimerApellido, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.SegundoApellido, "Segundo Apellido", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(m => m.SegundoApellido, new { htmlAttributes = new { @class = "form-control" } })
+        <div class="form-row">
+            <div class="form-term">Segundo Apellido</div>
+            <div class="form-value">
+                @Html.TextBoxFor(m => m.SegundoApellido, new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.SegundoApellido, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.Identificacion, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(m => m.Identificacion, new { htmlAttributes = new { @class = "form-control" } })
+        <div class="form-row">
+            <div class="form-term">Identificación</div>
+            <div class="form-value">
+                @Html.TextBoxFor(m => m.Identificacion, new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.Identificacion, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.CorreoElectronico, "Correo electrónico", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(m => m.CorreoElectronico, new { htmlAttributes = new { @class = "form-control" } })
+        <div class="form-row">
+            <div class="form-term">Correo electrónico</div>
+            <div class="form-value">
+                @Html.TextBoxFor(m => m.CorreoElectronico, new { @class = "form-control", type = "email" })
                 @Html.ValidationMessageFor(m => m.CorreoElectronico, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <div style="display:flex; align-items:center; gap:12px;">
-                    <input type="submit" value="Crear" class="btn btn-outline-success" />
-                    @Html.ActionLink("← Regresar", "Index", "Usuarios", null,
-                        new
-                        {
-                            @class = "btn",
-                            // empuja el link a la derecha y mantiene el estilo
-                            style = "margin-left:auto; border:1px solid #666; color:#666; background:#fff;" +
-                            "font-weight:600; border-radius:10px; padding:6px 14px;"
+    </div>
 
-
-                        })
-                </div>
-            </div>
-        </div>
-    </div> <!-- /form-horizontal -->
-}   <!-- cierra Html.BeginForm -->
+    <div class="form-actions">
+        <input type="submit" value="Crear" class="btn btn-outline-success" />
+        <span class="spacer"></span>
+        @Html.ActionLink("← Regresar", "Index", "Usuarios", null,
+            new
+                 {
+                @class = "btn",
+                style = "margin-left:auto; border:1px solid #666; color:#666; background:#fff;" +
+                        "font-weight:600; border-radius:10px; padding:6px 14px;"
+            })
+    </div>
+}
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

@@ -13,6 +13,7 @@ namespace BancoLosPatitos.Controllers
 {
     [LoggingExceptionFilter]
     [Authorize(Roles = "Administrador")]
+    [RequireRegisteredUser]
     public class UsuariosController : Controller
     {
         private PatitosContext db = new PatitosContext();
@@ -32,10 +33,6 @@ namespace BancoLosPatitos.Controllers
                     .FirstOrDefault();
             }
 
-
-
-
-            //var usuarios = db.Usuarios.Include(u => u.Comercio);
             return View(usuario.ToList());
         }
 
@@ -62,12 +59,16 @@ namespace BancoLosPatitos.Controllers
         }
 
         // POST: Usuarios/Create
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
-        // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IdUsuario,IdComercio,IdNetUser,Nombres,PrimerApellido,SegundoApellido,Identificacion,CorreoElectronico,FechaDeRegistro,FechaDeModificacion,Estado")] Usuarios usuarios)
+        public ActionResult Create([Bind(Include = "IdUsuario,IdComercio,IdNetUser,Nombres,PrimerApellido,SegundoApellido,Identificacion,CorreoElectronico")] Usuarios usuarios)
         {
+            // Validación: Identificación única
+            if (db.Usuarios.Any(u => u.Identificacion == usuarios.Identificacion))
+            {
+                ModelState.AddModelError("Identificacion", "Ya existe un usuario con esta identificación.");
+            }
+
             if (ModelState.IsValid)
             {
                 try
@@ -75,6 +76,7 @@ namespace BancoLosPatitos.Controllers
                     usuarios.FechaDeRegistro = DateTime.Now;
                     usuarios.FechaDeModificacion = DateTime.Now;
                     usuarios.Estado = 1;
+
                     db.Usuarios.Add(usuarios);
                     db.SaveChanges();
 
@@ -86,12 +88,13 @@ namespace BancoLosPatitos.Controllers
                     Helpers.BitacoraHelper.RegistrarError(db, "Usuarios", ex);
                     ModelState.AddModelError("", "Ocurrió un error al crear usuario.");
                 }
-
             }
 
+            // Si algo falla, rearmamos el combo y devolvemos la vista con errores
             ViewBag.IdComercio = new SelectList(db.Comercios, "IdComercio", "Identificacion", usuarios.IdComercio);
             return View(usuarios);
         }
+
 
         // GET: Usuarios/Edit/5
         public ActionResult Edit(int? id)

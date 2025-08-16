@@ -1,11 +1,14 @@
 ﻿@model IEnumerable<BancoLosPatitos.Models.Sinpe>
 @{
     ViewBag.Title = "SINPE";
+    var telefonoActual = ViewBag.Telefono as string;
+    var idCaja = ViewBag.IdCaja as int?;
 }
 
 
-
-<h2>SINPES</h2>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">SINPES</h1>
+</div>
 
 @if (TempData["mensaje"] != null)
 {
@@ -20,9 +23,9 @@
     <div class="alert alert-info">@ViewBag.Info</div>
 }
 
-@if (ViewBag.Telefono != null)
+@if (!String.IsNullOrWhiteSpace(telefonoActual))
 {
-    <h5 class="text-primary mb-3">SINPE recibidos en caja: @ViewBag.Telefono</h5>
+    <h5 class="text-primary mb-3">SINPE de la caja: @telefonoActual</h5>
 }
 
 <div class="row align-items-center mb-3">
@@ -31,7 +34,7 @@
         {
             <div class="form-inline">
                 <label for="telefono" class="mr-2">Buscar SINPE (teléfono de caja):</label>
-                <input type="number" id="telefono" name="telefono" class="form-control mr-2" placeholder="Teléfono" required />
+                <input type="text" id="telefono" name="telefono" class="form-control mr-2" value="@telefonoActual" placeholder="Teléfono" required />
                 <button type="submit" class="btn btn-success">Buscar</button>
             </div>
         }
@@ -40,21 +43,23 @@
     <div class="col-md-6 text-end">
         @if (User.IsInRole("Administrador"))
         {
-            @Html.ActionLink("Crear Nuevo", "Create", "Sinpes", null, new { @class = "btn btn-outline-success" })
+            @Html.ActionLink("Registrar Nuevo SINPE", "Create", "Sinpes",
+                idCaja.HasValue ? new { idCaja = idCaja.Value } : null,
+                new { @class = "btn btn-outline-success" })
         }
     </div>
 </div>
 
 <table class="table">
     <tr>
-        <th>Telefono de origen</th>
-        <th>Nombre de origen</th>
-        <th>Telefono del destinatario</th>
-        <th>Nombre del destinatario</th>
-        <th>@Html.DisplayNameFor(m => m.First().Monto)</th>
+        <th>Teléfono origen</th>
+        <th>Nombre origen</th>
+        <th>Teléfono destinatario</th>
+        <th>Nombre destinatario</th>
+        <th>Monto</th>
+        <th>Descripción</th>
         <th>Fecha</th>
-        <th>@Html.DisplayNameFor(m => m.First().Descripcion)</th>
-        <th>@Html.DisplayNameFor(m => m.First().Estado)</th>
+        <th>Estado</th>
         <th></th>
     </tr>
 
@@ -66,8 +71,8 @@
             <td>@item.TelefonoDestinatario</td>
             <td>@item.NombreDestinatario</td>
             <td>@item.Monto</td>
-            <td>@item.FechaDeRegistro</td>
             <td>@item.Descripcion</td>
+            <td>@item.FechaDeRegistro.ToString("dd/MM/yyyy HH:mm")</td>
             <td>@(item.Estado == 1 ? "Sincronizado" : "No sincronizado")</td>
             <td>
                 @if (item.Estado == 0 && (User.IsInRole("Administrador") || User.IsInRole("Cajero")))
@@ -87,10 +92,7 @@
     }
 </table>
 
-
-
-
-<!-- Caja de acciones SINPE (estilo tipo “roles”) -->
+<!-- Acciones SINPE por medio de la API -->
 <div style="border:1px solid #2e7d32; border-radius:10px; padding:12px; margin-top:12px;">
     <div style="font-weight:700; color:#2e7d32; margin-bottom:10px;">
         Acciones SINPE por medio de la API
@@ -98,37 +100,13 @@
 
     <div style="display:flex; gap:10px; flex-wrap:wrap;">
         @Html.ActionLink("Consultar SINPE API", "Consultar", "Sinpes", null,
-            new
-                 {
-                     @class = "btn",
-                  style = "border:1px solid #2e7d32; color:#2e7d32; background:#fff; font-weight:600; border-radius:10px; padding:6px 14px;"
-                 })
-
+            new { @class = "btn", style = "border:1px solid #2e7d32; color:#2e7d32; background:#fff; font-weight:600; border-radius:10px; padding:6px 14px;" })
         @Html.ActionLink("Sincronizar SINPE API", "Sincronizar", "Sinpes", null,
-            new
-                 {
-                     @class = "btn",
-                  style = "border:1px solid #2e7d32; color:#2e7d32; background:#fff; font-weight:600; border-radius:10px; padding:6px 14px;"
-                 })
-
+            new { @class = "btn", style = "border:1px solid #2e7d32; color:#2e7d32; background:#fff; font-weight:600; border-radius:10px; padding:6px 14px;" })
         @Html.ActionLink("Recibir SINPE API", "Recibir", "Sinpes", null,
-            new
-                 {
-                     @class = "btn",
-                  style = "border:1px solid #2e7d32; color:#2e7d32; background:#fff; font-weight:600; border-radius:10px; padding:6px 14px;"
-                 })
+            new { @class = "btn", style = "border:1px solid #2e7d32; color:#2e7d32; background:#fff; font-weight:600; border-radius:10px; padding:6px 14px;" })
     </div>
 </div>
 
-
-
-
-
-
 @Html.ActionLink("← Regresar", "Index", "Comercios", null,
-    new
-    {
-        @class = "btn",
-        style = "border:1px solid #666; color:#666; background:#fff; font-weight:600; border-radius:10px; padding:6px 14px;"
-    })
-
+    new { @class = "btn", style = "border:1px solid #666; color:#666; background:#fff; font-weight:600; border-radius:10px; padding:6px 14px;" })

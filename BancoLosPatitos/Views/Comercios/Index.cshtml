@@ -7,7 +7,7 @@
 <h2>Lista de Comercios</h2>
 
 <p>
-    @Html.ActionLink("Crear Comercio", "ValidarIdentificacion", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Registrar Nuevo Comercio ", "ValidarIdentificacion", null, new { @class = "btn btn-primary" })
 </p>
 <table class="table">
     <tr>
@@ -106,9 +106,19 @@
     }
 
 </table>
-<div>
-    @Html.ActionLink("⚙ Ir a configuración de comercios", "Index", "ConfiguracionComercios", null, new { @class = "btn btn-secondary me-2" })
-</div>
-<div>
-    @Html.ActionLink("Regresar a menu principal", "Index", "Home")
+
+<div class="form-group">
+    <div class="col-md-12">
+        <div style="display:flex; align-items:center; justify-content:space-between; width:100%;">
+            @Html.ActionLink("⚙ Ir a configuración de comercios", "Index", "ConfiguracionComercios", null,
+                new { @class = "btn btn-secondary" })
+
+            @Html.ActionLink("← Regresar a la página de Inicio", "Index", "Home", null,
+                new
+                    {
+                    @class = "btn",
+                    style = "border:1px solid #6c757d; color:#6c757d; background:#fff; border-radius:.5rem; padding:.5rem 1rem;"
+                })
+        </div>
+    </div>
 </div>

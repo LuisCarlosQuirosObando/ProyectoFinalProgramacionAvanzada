@@ -12,17 +12,18 @@ namespace BancoLosPatitos.Controllers
 {
     [LoggingExceptionFilter]
     [Authorize(Roles = "Administrador,Cajero")]
+    [RequireRegisteredUser]
     public class CajasController : Controller
     {
         private PatitosContext db = new PatitosContext();
 
-        /* ========= Helpers de seguridad para Cajero ========= */
+        /* Valida si el usuario es cajero*/
 
         private bool EsCajero()
             => User.IsInRole("Cajero");
 
         private Guid NetUserId()
-            => Guid.Parse(User.Identity.GetUserId()); // AspNetUsers.Id es string GUID
+            => Guid.Parse(User.Identity.GetUserId()); 
 
         // Comercios a los que pertenece el cajero
         private int[] ComerciosPermitidos()
@@ -42,7 +43,7 @@ namespace BancoLosPatitos.Controllers
             return permitidos.Contains(idComercio);
         }
 
-        /* ======================= Actions ===================== */
+
 
         // GET: Cajas
         public ActionResult Index(int? idComercio)
@@ -85,6 +86,8 @@ namespace BancoLosPatitos.Controllers
         }
 
         // GET: Cajas/Create
+
+        [Authorize(Roles = "Administrador")]
         public ActionResult Create()
         {
             if (EsCajero())
@@ -186,7 +189,7 @@ namespace BancoLosPatitos.Controllers
             var cajaActual = db.Cajas.Find(caja.IdCaja);
             if (cajaActual == null) return HttpNotFound();
 
-            // Seguridad: el cajero no puede editar cajas fuera de sus comercios
+            // Cajero no puede editar cajas fuera de sus comercios
             if (EsCajero() && !CajeroPuedeComercio(cajaActual.IdComercio))
                 return new HttpStatusCodeResult(403);
 
@@ -264,7 +267,7 @@ namespace BancoLosPatitos.Controllers
             if (string.IsNullOrEmpty(telefono))
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            // Seguridad: solo sinpes de cajas de comercios permitidos
+            // Solo sinpes de cajas de comercios permitidos
             if (EsCajero())
             {
                 var permitidos = ComerciosPermitidos();

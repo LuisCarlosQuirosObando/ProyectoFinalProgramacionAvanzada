@@ -62,6 +62,30 @@ namespace BancoLosPatitos.Controllers
             if (user != null)
             {
                 await SignInAsync(user, model.RememberMe);
+
+                // Mensaje de bienvenida
+                TempData["Bienvenida"] = $"¡Bienvenido, {user.Email}!";
+
+                // Si es cajero, valida que esté vinculado a un comercio (Usuarios.IdNetUser y Estado = 1)
+                if (await UserManager.IsInRoleAsync(user.Id, "Cajero"))
+                {
+                    using (var db = new PatitosContext())
+                    {
+                        Guid uid;
+                        var tieneGuid = Guid.TryParse(user.Id, out uid);
+
+                        var vinculado = tieneGuid &&
+                                        db.Usuarios.Any(u => u.Estado == 1 && u.IdNetUser == uid);
+
+                        if (!vinculado)
+                        {
+                            AuthenticationManager.SignOut();
+                            TempData["Error"] = "Tu cuenta no está registrada en ningún comercio. Solicita a un administrador que te asigne.";
+                            return RedirectToAction("Index", "Home");
+                        }
+                    }
+                }
+
                 return RedirectToLocal(returnUrl);
             }
 
@@ -102,7 +126,7 @@ namespace BancoLosPatitos.Controllers
 
             if (model.Rol == "Cajero")
             {
-                // 1) Debe existir en Usuarios como pendiente (sin IdNetUser)
+                // Valida que un usuario exista en Usuarios como pendiente (sin IdNetUser)
                 using (var dbNegocio = new PatitosContext())
                 {
                     var existePendiente = dbNegocio.Usuarios.Any(u =>
@@ -118,7 +142,7 @@ namespace BancoLosPatitos.Controllers
                     }
                 }
 
-                // 2) ¿Ya existe en Identity?
+                //  Valida que ya existe en Identity
                 var yaExisteIdentity = await UserManager.FindByNameAsync(model.Email);
                 if (yaExisteIdentity != null)
                 {
@@ -142,6 +166,7 @@ namespace BancoLosPatitos.Controllers
                     }
 
                     await SignInAsync(yaExisteIdentity, isPersistent: false);
+                    TempData["Bienvenida"] = $"¡Bienvenido, {yaExisteIdentity.Email}!";
                     return RedirectToAction("Index", "Home");
                 }
             }
@@ -172,13 +197,14 @@ namespace BancoLosPatitos.Controllers
                 using (var db = new PatitosContext())
                 {
                     var cajero = db.Usuarios.First(u => u.CorreoElectronico == model.Email);
-                    cajero.IdNetUser = Guid.Parse(user.Id); // ajusta si tu IdNetUser es string
+                    cajero.IdNetUser = Guid.Parse(user.Id); // 
                     cajero.FechaDeModificacion = DateTime.Now;
                     db.SaveChanges();
                 }
             }
 
             await SignInAsync(user, isPersistent: false);
+            TempData["Bienvenida"] = $"¡Bienvenido, {user.Email}!";
             return RedirectToAction("Index", "Home");
         }
 
@@ -192,7 +218,7 @@ namespace BancoLosPatitos.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        /* ===================== HELPERS ===================== */
+        
 
         // Devuelve la lista de correos de cajeros pendientes por sincronizar
         private static System.Collections.Generic.List<string> DBCorreoCajero()

@@ -4,6 +4,7 @@
     ViewBag.Title = "Cajas";
 }
 
+
 <h2>Listado de Cajas</h2>
 
 <p>
@@ -52,7 +53,16 @@
             </td>
 
             <td>
-                @(item.Estado == 1 ? "Activo" : "Inactivo")
+                @if (item.Estado == 1)
+                {
+                    <span class="badge badge-success">Activo</span>
+                }
+                else
+                {
+                    <span class="badge badge-secondary">Inactivo</span>
+                }
+
+
             </td>
             <td>
                 @Html.ActionLink("Editar", "Edit", new { id = item.IdCaja }) |

@@ -1,60 +1,95 @@
 ﻿using BancoLosPatitos.API.Models;
 using BancoLosPatitos.Filtros;
 using BancoLosPatitos.Models;
-using Microsoft.AspNet.Identity;              // <-- agregado
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using System.Net.Http.Json;
+
+
+
 
 namespace BancoLosPatitos.Controllers
 {
+
+
+
     [LoggingExceptionFilter]
+    [RequireRegisteredUser]
     public class SinpesController : Controller
     {
         private PatitosContext db = new PatitosContext();
 
+        private readonly string apiBaseUrl = "https://localhost:44361/api/sinpe/";
+
         // GET: Sinpes
-        // Muestra lista vacía o filtrada por teléfono (validado y con permisos)
+        // Soporta entrar por telefono o por idCaja (se convierte a teléfono)
         [Authorize(Roles = "Administrador,Cajero")]
-        public ActionResult Index(string telefono = null)
+        public ActionResult Index(string telefono = null, int? idCaja = null)
         {
+            // Si viene idCaja, lo validamos a su teléfono de SINPE
+            if (idCaja.HasValue)
+            {
+                var telCaja = db.Cajas
+                                .Where(c => c.IdCaja == idCaja.Value)
+                                .Select(c => c.TelefonoSINPE)
+                                .FirstOrDefault();
+
+                // Si existe, priorizamos ese teléfono como filtro
+                if (!string.IsNullOrWhiteSpace(telCaja))
+                {
+                    telefono = telCaja;
+                    ViewBag.IdCaja = idCaja;   // 
+                }
+                else
+                {
+                    ViewBag.Error = "La caja indicada no existe o no tiene teléfono SINPE.";
+                }
+            }
+
             var data = new List<Sinpe>();
 
             if (!string.IsNullOrWhiteSpace(telefono))
             {
                 telefono = telefono.Trim();
 
-                // Teléfonos de SINPE que el usuario puede consultar
+                // Filtrado por permisos del usuario (Administrador: todos; Cajero: sus comercios)
                 var permitidos = TelefonosPermitidosParaUsuarioActual();
 
-                // 1) Validación previa: ¿ese teléfono está registrado y permitido?
+                // Valida si puede ver ese teléfono?
                 if (!permitidos.Contains(telefono))
                 {
-                    ViewBag.Error = "No existen SINPE asociados al teléfono ingresado, "
-                                  + "o no tiene permisos para consultarlo.";
+                    ViewBag.Error = "No existen SINPE asociados al teléfono ingresado, o no tiene permisos para consultarlo.";
                     ViewBag.Telefono = telefono;
-                    return View(data); // vuelve sin datos, pero sin 403
+                    return View(data); // 
                 }
 
-                // 2) Consulta normal
+                // Consulta normal
                 data = db.Sinpes
                          .Where(s => s.TelefonoDestinatario == telefono)
                          .OrderByDescending(s => s.FechaDeRegistro)
                          .ToList();
 
                 ViewBag.Telefono = telefono;
+
+                // Para que el botón "Registrar Nuevo SINPE" sepa de qué caja es
+                ViewBag.IdCaja = db.Cajas
+                                   .Where(c => c.TelefonoSINPE == telefono)
+                                   .Select(c => (int?)c.IdCaja)
+                                   .FirstOrDefault();
+
                 if (data.Count == 0)
                     ViewBag.Info = "No hay movimientos para ese teléfono.";
             }
             else
             {
-                // Si no hay filtro: para Admin puedes mostrar últimos N; para Cajero, vacío
+                // lista vacía
                 if (User.IsInRole("Administrador"))
                     data = db.Sinpes.OrderByDescending(s => s.FechaDeRegistro).Take(200).ToList();
             }
@@ -62,16 +97,13 @@ namespace BancoLosPatitos.Controllers
             return View(data);
         }
 
-        // Teléfonos de caja (TelefonoSINPE) que el usuario puede ver
+        // Teléfonos de caja visibles según el usuario actual
         private List<string> TelefonosPermitidosParaUsuarioActual()
         {
             if (User.IsInRole("Administrador"))
-            {
                 return db.Cajas.Select(c => c.TelefonoSINPE).ToList();
-            }
 
-            // Cajero: por sus comercios asociados
-            var userIdStr = User.Identity.GetUserId();  // string (Identity)
+            var userIdStr = User.Identity.GetUserId(); // string
             Guid userGuid;
             Guid.TryParse(userIdStr, out userGuid);
 
@@ -86,8 +118,7 @@ namespace BancoLosPatitos.Controllers
                      .ToList();
         }
 
-        // ---------- resto de acciones sin cambios salvo la redirección ----------
-
+        // GET: Sinpes/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -96,14 +127,28 @@ namespace BancoLosPatitos.Controllers
             return View(sinpe);
         }
 
+        // GET: Sinpes/Create
         [Authorize(Roles = "Administrador")]
-        public ActionResult Create() => View();
+        public ActionResult Create(int? idCaja)
+        {
+            ViewBag.IdCaja = idCaja; // la vista lo usa para armar el "Regresar"
+            ViewBag.Telefono = idCaja.HasValue
+            ? db.Cajas.Where(c => c.IdCaja == idCaja.Value)
+                .Select(c => c.TelefonoSINPE)
+                .FirstOrDefault()
+      : null;   
 
+            return View();
+        }
+
+        // POST: Sinpes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrador")]
-        public ActionResult Create([Bind(Include = "IdSinpe,TelefonoOrigen,NombreOrigen,TelefonoDestinatario,NombreDestinatario,Monto,FechaDeRegistro,Descripcion,Estado")] Sinpe sinpe)
+        public ActionResult Create([Bind(Include = "IdSinpe,TelefonoOrigen,NombreOrigen,TelefonoDestinatario,NombreDestinatario,Monto,FechaDeRegistro,Descripcion,Estado")] Sinpe sinpe,
+                                   int? idCaja)
         {
+            // Validación de caja destino (por teléfono)
             var cajaDestino = db.Cajas.FirstOrDefault(c => c.TelefonoSINPE == sinpe.TelefonoDestinatario);
             if (cajaDestino == null)
                 ModelState.AddModelError("TelefonoDestinatario", "No existe una caja con este número de teléfono.");
@@ -121,7 +166,16 @@ namespace BancoLosPatitos.Controllers
 
                     Helpers.BitacoraHelper.RegistrarEvento(db, "SINPES", "Registrar", sinpe);
 
-                    // Volver a la lista filtrada por el teléfono de la caja
+                    // Redireccionar manteniendo el contexto por idCaja si es posible
+                    var idCajaRedirect = db.Cajas
+                                           .Where(c => c.TelefonoSINPE == sinpe.TelefonoDestinatario)
+                                           .Select(c => (int?)c.IdCaja)
+                                           .FirstOrDefault();
+
+                    if (idCajaRedirect.HasValue)
+                        return RedirectToAction("Index", new { idCaja = idCajaRedirect.Value });
+
+                    // por teléfono si no hubiera caja 
                     return RedirectToAction("Index", new { telefono = sinpe.TelefonoDestinatario });
                 }
                 catch (Exception ex)
@@ -131,9 +185,11 @@ namespace BancoLosPatitos.Controllers
                 }
             }
 
+            ViewBag.IdCaja = idCaja; // 
             return View(sinpe);
         }
 
+        // GET: Sinpes/Edit/5
         [Authorize(Roles = "Administrador")]
         public ActionResult Edit(int? id)
         {
@@ -143,6 +199,7 @@ namespace BancoLosPatitos.Controllers
             return View(sinpe);
         }
 
+        // POST: Sinpes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrador")]
@@ -152,11 +209,21 @@ namespace BancoLosPatitos.Controllers
             {
                 db.Entry(sinpe).State = EntityState.Modified;
                 db.SaveChanges();
+
+                var idCajaRedirect = db.Cajas
+                                       .Where(c => c.TelefonoSINPE == sinpe.TelefonoDestinatario)
+                                       .Select(c => (int?)c.IdCaja)
+                                       .FirstOrDefault();
+
+                if (idCajaRedirect.HasValue)
+                    return RedirectToAction("Index", new { idCaja = idCajaRedirect.Value });
+
                 return RedirectToAction("Index", new { telefono = sinpe.TelefonoDestinatario });
             }
             return View(sinpe);
         }
 
+        // GET: Sinpes/Delete/5
         [Authorize(Roles = "Administrador")]
         public ActionResult Delete(int? id)
         {
@@ -166,6 +233,7 @@ namespace BancoLosPatitos.Controllers
             return View(sinpe);
         }
 
+        // POST: Sinpes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrador")]
@@ -175,6 +243,15 @@ namespace BancoLosPatitos.Controllers
             var tel = sinpe?.TelefonoDestinatario;
             db.Sinpes.Remove(sinpe);
             db.SaveChanges();
+
+            var idCajaRedirect = db.Cajas
+                                   .Where(c => c.TelefonoSINPE == tel)
+                                   .Select(c => (int?)c.IdCaja)
+                                   .FirstOrDefault();
+
+            if (idCajaRedirect.HasValue)
+                return RedirectToAction("Index", new { idCaja = idCajaRedirect.Value });
+
             return RedirectToAction("Index", new { telefono = tel });
         }
 
@@ -194,13 +271,20 @@ namespace BancoLosPatitos.Controllers
                 TempData["mensaje"] = "Este SINPE ya estaba sincronizado o no existe.";
             }
 
-            // Volver a la lista filtrada por el teléfono de la caja
-            return RedirectToAction("Index", new { telefono = sinpe?.TelefonoDestinatario });
+            var idCajaRedirect = db.Cajas
+                                   .Where(c => c.TelefonoSINPE == sinpe.TelefonoDestinatario)
+                                   .Select(c => (int?)c.IdCaja)
+                                   .FirstOrDefault();
+
+            if (idCajaRedirect.HasValue)
+                return RedirectToAction("Index", new { idCaja = idCajaRedirect.Value });
+
+            return RedirectToAction("Index", new { telefono = sinpe.TelefonoDestinatario });
         }
 
         public ActionResult Consultar() => View();
 
-        private readonly string apiBaseUrl = "https://localhost:44361/api/sinpe/";
+        
 
         [HttpPost]
         public async Task<ActionResult> Consultar(string telefono)
@@ -283,3 +367,4 @@ namespace BancoLosPatitos.Controllers
         }
     }
 }
+

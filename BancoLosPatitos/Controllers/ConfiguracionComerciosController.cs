@@ -13,6 +13,7 @@ namespace BancoLosPatitos.Controllers
 {
     [LoggingExceptionFilter]
     [Authorize(Roles = "Administrador")]
+    [RequireRegisteredUser]
     public class ConfiguracionComerciosController : Controller
     {
         private PatitosContext db = new PatitosContext();

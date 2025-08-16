@@ -1,117 +1,154 @@
 ﻿@model BancoLosPatitos.Models.Comercio
-
 @{
     ViewBag.Title = "Detalles";
+    var tipoId = Model.TipoIdentificacion switch
+    {
+        1 => "Física",
+        2 => "Jurídica",
+        _ => "No especifica"
+    };
+    var tipoComercio = Model.TipoDeComercio switch
+    {
+        1 => "Restaurantes",
+        2 => "Supermercados",
+        3 => "Ferreterías",
+        _ => "Otros"
+    };
 }
 
-<h2>Detalles Comercio</h2>
+<style>
+    /* Tarjeta */
+    .detail-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        overflow: hidden; /* evita que se vea el borde bajo los radios */
+    }
 
-<div>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Identificacion)
-        </dt>
+    /* Filas */
+    .detail-row {
+        display: flex;
+        border-bottom: 1px solid #f1f5f9;
+    }
 
-        <dd>
-            @Html.DisplayFor(model => model.Identificacion)
-        </dd>
+        .detail-row:last-child {
+            border-bottom: 0;
+        }
 
-        <dt>
-            Tipo de identificacion
-        </dt>
+    /* Celdas */
+    .detail-term,
+    .detail-value {
+        padding: 12px 16px;
+    }
 
-        <dd>
-            @(
-             Model.TipoIdentificacion switch
-             {
-                 1 => "Física",
-                 2 => "Jurídica",
-                 _ => "No especifica"
-              })
-        </dd>
+    /* Columna izquierda (títulos) en gris claro */
+    .detail-term {
+        min-width: 260px;
+        background: #e5e7eb; /* gris claro (Gray 200) */
+        color: #1f2937; /* texto gris oscuro */
+        font-weight: 600;
+        padding: 12px 16px;
+        border-right: 1px solid #d1d5db; /* separador sutil */
+    }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
+    /* (opcional) rayado muy suave en la columna de valores */
+    .detail-row:nth-child(odd) .detail-value {
+        background: #fafafa;
+    }
 
-        <dd>
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
+    /* Redondeo en la primera y última fila, solo del lado izquierdo */
+    .detail-row:first-child .detail-term {
+        border-top-left-radius: 8px;
+    }
 
-        <dt>
-            Tipo de comercio
-        </dt>
+    .detail-row:last-child .detail-term {
+        border-bottom-left-radius: 8px;
+    }
 
-        <dd>
-            @(
-             Model.TipoDeComercio switch
-             {
-                 1 => "Restaurantes",
-                 2 => "Supermercados",
-                 3 => "Ferreterías",
-                 _ => "Otros"
-              })
-        </dd>
+    /* Columna derecha  */
+    .detail-value {
+        flex: 1;
+        color: #111827; /* casi negro */
+        background: #fff; /* explícito por si cambias el fondo del card */
+    }
+</style>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Telefono)
-        </dt>
+<h2 class="clearfix" style="margin-bottom:12px;">
+    <span>Detalles Comercio</span>
+    <span class="pull-right">
+        @Html.ActionLink(
+            "Ver cajas",
+            "Index", "Cajas",
+            new { idComercio = Model.IdComercio },
+            new { @class = "btn btn-primary", style = "margin-right:8px;" })
 
-        <dd>
-            @Html.DisplayFor(model => model.Telefono)
-        </dd>
 
-        <dt>
-            Correo electronico
-        </dt>
+    </span>
+</h2>
 
-        <dd>
-            @Html.DisplayFor(model => model.CorreoElectronico)
-        </dd>
+<div class="detail-card">
+    <div class="detail-row">
+        <span class="detail-term">Identificación:</span>
+        <span class="detail-value">@Model.Identificacion</span>
+    </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Direccion)
-        </dt>
+    <div class="detail-row">
+        <span class="detail-term">Tipo de identificación:</span>
+        <span class="detail-value">@tipoId</span>
+    </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.Direccion)
-        </dd>
+    <div class="detail-row">
+        <span class="detail-term">Nombre:</span>
+        <span class="detail-value">@Model.Nombre</span>
+    </div>
 
-        <dt>
-            Fecha de registro
-        </dt>
+    <div class="detail-row">
+        <span class="detail-term">Tipo de comercio:</span>
+        <span class="detail-value">@tipoComercio</span>
+    </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.FechaDeRegistro)
-        </dd>
+    <div class="detail-row">
+        <span class="detail-term">Teléfono:</span>
+        <span class="detail-value">@Model.Telefono</span>
+    </div>
 
-        <dt>
-            Fecha de modificacion
-        </dt>
+    <div class="detail-row">
+        <span class="detail-term">Correo electrónico:</span>
+        <span class="detail-value">@Model.CorreoElectronico</span>
+    </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.FechaDeModificacion)
-        </dd>
+    <div class="detail-row">
+        <span class="detail-term">Dirección:</span>
+        <span class="detail-value">@Model.Direccion</span>
+    </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Estado)
-        </dt>
+    <div class="detail-row">
+        <span class="detail-term">Fecha de registro:</span>
+        <span class="detail-value">@Model.FechaDeRegistro.ToString("dd/MM/yyyy HH:mm")</span>
+    </div>
 
-        <dd>
-            @(
-             Model.Estado switch
-             {
-                 1 => "Activo",
-                 _ => "Inactivo"
-              })
-        </dd>
+    <div class="detail-row">
+        <span class="detail-term">Fecha de modificación:</span>
+        <span class="detail-value">@Model.FechaDeModificacion.ToString("dd/MM/yyyy HH:mm")</span>
+    </div>
 
-    </dl>
+    <div class="detail-row">
+        <span class="detail-term">Estado:</span>
+        <span class="detail-value">
+            @if (Model.Estado == 1)
+            {
+                <span class="badge badge-success">Activo</span>
+            }
+            else
+            {
+                <span class="badge badge-secondary">Inactivo</span>
+            }
+        </span>
+    </div>
 </div>
 @Html.ActionLink("← Regresar", "Index", "Comercios", null,
     new
-    {
+         {
         @class = "btn",
-        style = "border:1px solid #666; color:#666; background:#fff; font-weight:600; border-radius:10px; padding:6px 14px;"
+        style = "border:1px solid #6c757d; color:#6c757d; background:#fff; border-radius:.5rem; padding:.5rem 1rem;"
     })
